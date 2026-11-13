@@ -274,8 +274,39 @@ function makeProfile(name, isDefault) {
     recentChars: isDefault ? ['是', '我', '好', '你'] : [],
     testHistory: [],
     polyMastered: {},
-    laMastered: {}
+    laMastered: {},
+    v3BulkCleaned: true
   };
+}
+
+function cleanupLegacyBulkLit(p) {
+  if (!p || p.v3BulkCleaned) return false;
+  let changed = false;
+  if (p.charLevels && typeof p.charLevels === 'object') {
+    for (const g of Object.keys(p.charLevels)) {
+      if (p.charLevels[g] === 1) {
+        delete p.charLevels[g];
+        changed = true;
+      }
+    }
+  }
+  p.v3BulkCleaned = true;
+  return true;
+}
+
+function resetUnverifiedLitChars() {
+  const p = currentProfile();
+  if (!p || !p.charLevels) return;
+  let cleared = 0;
+  for (const g of Object.keys(p.charLevels)) {
+    if (p.charLevels[g] === 1) {
+      delete p.charLevels[g];
+      cleared++;
+    }
+  }
+  persistCurrent();
+  renderAllViews();
+  toast(t(`Cleared ${cleared} Soft-Glow (Lv.1) characters. Studied Lv.2/Lv.3 kept!`, `已清除 ${cleared} 个基础微亮 (Lv.1) 汉字，保留所有已学 Lv.2/Lv.3！`));
 }
 
 function loadProfiles() {
@@ -284,7 +315,16 @@ function loadProfiles() {
     if (raw) {
       const arr = JSON.parse(raw);
       if (Array.isArray(arr) && arr.length) {
-        return arr.filter(p => p && p.id && p.name).map(p => ({ ...p, polyMastered: p.polyMastered || {}, laMastered: p.laMastered || {} }));
+        let dirty = false;
+        const list = arr.filter(p => p && p.id && p.name).map(p => {
+          const norm = { ...p, polyMastered: p.polyMastered || {}, laMastered: p.laMastered || {} };
+          if (cleanupLegacyBulkLit(norm)) dirty = true;
+          return norm;
+        });
+        if (dirty && list.length) {
+          try { localStorage.setItem(LS_PROFILES_KEY, JSON.stringify(list)); } catch (e) {}
+        }
+        return list;
       }
     }
   } catch (e) {}
@@ -1307,9 +1347,6 @@ function startChecklistAssessment() {
   const samples = buildRandomChecklistSamples();
   const displayChars = shuffleArr(samples.flatMap(s => s.chars));
   const checked = new Set();
-  for (const ch of displayChars) {
-    if (getCharLevel(ch.g) >= 1) checked.add(ch.g);
-  }
   testState = {
     mode: 'checklist',
     checked,
@@ -1322,20 +1359,17 @@ function startChecklistAssessment() {
     results: [],
     testKind: 'calibrate'
   };
-  navGo('test');
+  if (currentView !== 'test') navGo('test');
   renderTestCenter();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function reshuffleChecklist() {
   const samples = buildRandomChecklistSamples();
   const displayChars = shuffleArr(samples.flatMap(s => s.chars));
-  const checked = new Set();
-  for (const ch of displayChars) {
-    if (getCharLevel(ch.g) >= 1) checked.add(ch.g);
-  }
   testState.samples = samples;
   testState.displayChars = displayChars;
-  testState.checked = checked;
+  testState.checked = new Set();
   renderTestCenter();
 }
 
@@ -1509,10 +1543,8 @@ function answerTestQuestion(pickedG) {
     }
     setCharLevel(q.g, newLvl);
   } else if (testState.mode === 'calibrate') {
-    if (ok) {
-      newLvl = Math.min(3, oldLvl + 1);
-      setCharLevel(q.g, newLvl);
-    }
+    // Placement calibration strictly measures level & frontier without lighting Map stars
+    newLvl = oldLvl;
   }
 
   testState.results.push({ g: q.g, ok, oldLvl, newLvl, kind: q.kind });
@@ -1615,7 +1647,7 @@ function renderTestCenter() {
         <div class="stat-card">
           <div class="label">${t('Mode 1 · Initial Placement', '模式一 · 摸底定级')}</div>
           <h3 style="margin-top:8px">📋 ${t('Character Checklist Test', '识字水平摸底测评')}</h3>
-          <p class="muted">${t('Pick characters you know from a random 48-char map, then pass 5 quick questions. Calibrates recommendation level without bulk-lighting untested characters.', '从随机 48 字星图中勾选认识的字，再测 5 题真伪校准。只校准你的推词/推字难度，不会整批点亮未学未测的字；只有真测过的字才微亮（Lv.1）。')}</p>
+          <p class="muted">${t('Pick characters you know from a random 48-char map, then pass 5 quick questions. Calibrates recommendation level only — never bulk-lights your Character Map.', '从随机 48 字星图中勾选认识的字，再测 5 题真伪校准。只测定你的推词/推字起点，不会点亮或批量点亮星图中的字。')}</p>
           <button class="cta gold" onclick="startChecklistAssessment()"><span>${p.assessed ? t('Retake Checklist Test', '重新进行摸底定级') : t('Start Checklist Test', '开始摸底定级')}</span><span>→</span></button>
         </div>
         <div class="stat-card">
@@ -1628,9 +1660,15 @@ function renderTestCenter() {
 
       <div class="plan-card" style="margin-top:14px">
         <div class="label">${t('Mode 3 · Lit Spot-Check', '模式三 · 专项巩固')} <span>${t('100% sampled from your lit characters', '100% 抽查已点亮的汉字')}</span></div>
-        <p class="muted" style="margin:6px 0 0">${t('Verify your Soft Glow (Lv.1) and Lit Bamboo (Lv.2) characters. Solid recall upgrades them to Radiant Gold; misses dim them back for re-study.', '把初始测评得到的「基础微亮 Lv.1」或「翠竹点亮 Lv.2」字拿出来抽查检验，淘汰假认识，把真学会的字升到 ✦ 金辉精通。')}</p>
+        <p class="muted" style="margin:6px 0 0">${t('Verify your Soft Glow (Lv.1) and Lit Bamboo (Lv.2) characters. Solid recall upgrades them to Radiant Gold; misses dim them back for re-study.', '把「基础微亮 Lv.1」或「翠竹点亮 Lv.2」字拿出来抽查检验，淘汰假认识，把真学会的字升到 ✦ 金辉精通。')}</p>
         <button class="cta secondary" onclick="startOngoingTest('litOnly')"><span>🔍 ${t('Spot-Check Lit Characters (10 Qs)', '仅抽查已点亮汉字（10 题）')}</span><span>→</span></button>
       </div>
+
+      ${stats.counts[1] > 0 ? `
+        <div class="notice" style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+          <span>${t(`You have ${stats.counts[1]} Soft-Glow (Lv.1) characters. Want to clear Lv.1 and keep only Studio/Gold mastered characters?`, `当前星图还有 ${stats.counts[1]} 个基础微亮 (Lv.1) 汉字。如需清空 Lv.1、仅保留完整学过的 Lv.2/Lv.3 汉字可点击右侧：`)}</span>
+          <button class="audio-btn" style="min-height:34px;padding:5px 12px;font-size:12.5px" onclick="resetUnverifiedLitChars()">🧹 ${t('Clear Lv.1 Chars', '清空 Lv.1 微亮字')}</button>
+        </div>` : ''}
 
       <section>
         <div class="sec-head"><div><h2>${t('Recent Checkups', '最近测评记录')}</h2></div></div>
@@ -1651,16 +1689,25 @@ function renderTestCenter() {
     const estPreview = Math.round(testState.checked.size / totalChars * CHAR_DB_LIST.length);
     box.innerHTML = `
       <div class="plan-card">
-        <div class="label">${t('Step 1 of 2 · Tap characters you recognize', '第 1 步 / 共 2 步 · 勾选你已经认识的汉字')} <span>${t(`${testState.checked.size} / ${totalChars} selected (est. ~${estPreview} chars)`, `已选 ${testState.checked.size} / ${totalChars} 字（初步预估约 ${estPreview} 字）`)}</span></div>
-        <p class="muted" style="margin:6px 0 0">${t('Tap every character whose sound & meaning you know. Leave unfamiliar ones unchecked.', '请诚实点击你认识的汉字（不知道读音或意思就留空），系统会自动按分布估算你的识字范围。')}</p>
-        <div style="display:flex;gap:8px;margin-top:12px">
-          <button class="cta" style="margin-top:0" onclick="proceedToCalibration()"><span>${t('Next: 5-Question Calibration →', '下一步：5题真伪校准 →')}</span><span>→</span></button>
-          <button class="cta ghost" style="margin-top:0;width:auto" onclick="testState.mode='hub';renderTestCenter()">${t('Cancel', '取消')}</button>
+        <div class="label">
+          <span>📋 ${t('Placement Test Guide · Step 1 of 2', '摸底定级说明 · 第 1 步 / 共 2 步')}</span>
+          <button class="text-btn" style="min-height:auto;padding:2px 6px;font-size:12.5px;color:var(--ink2)" onclick="testState.mode='hub';renderTestCenter()">✕ ${t('Cancel', '取消')}</button>
+        </div>
+        <h3 style="margin:8px 0 6px;font-family:Fraunces,serif;font-size:20px">${t('How This 2-Step Placement Works', '如何进行摸底定级（简单两步）')}</h3>
+        <div style="display:grid;gap:8px;font-size:13.5px;line-height:1.55;color:var(--ink2)">
+          <div><b>① ${t('Tap Characters You Know Below:', '在下方点选你认识的汉字：')}</b> ${t('Below are 48 characters sampled randomly across all difficulty levels (none pre-selected). Tap every character whose sound & meaning you already know; leave unfamiliar ones blank.', '下方是从全字库随机抽取的 48 个汉字（默认全未选）。请点击所有你已经认识（知道读音和意思）的字，不认识的留空。')}</div>
+          <div><b>② ${t('5-Question Verification:', '完成 5 题真伪校准：')}</b> ${t('When finished, click the green button below the grid to answer 5 quick multiple-choice questions that verify your vocabulary size & starting frontier.', '点选完成后，点击字表底部的绿色按钮回答 5 道快速选择题，系统会校准你的真实识字量与推荐起点。')}</div>
+        </div>
+        <div class="notice" style="margin-top:10px">
+          <b>💡 ${t('Map Stays Clean (No Bulk Light-Up):', '不会批量点亮星图：')}</b> ${t('This placement test only calibrates your difficulty level for recommendations — it will NOT bulk-light characters on your Character Map. Characters light up only after you study or test them.', '摸底测试仅用于测定水平、跳过太简单的基础词，绝不会整批点亮星图！星图上的字只会在你真正学过、测过之后才点亮。')}
         </div>
       </div>
       <div class="check-tier">
         <div class="check-tier-head">
-          <div><b>${t('Random Character Map', '随机汉字采样图')}</b> <span class="muted" style="font-size:12.5px">${t(`${testState.checked.size} / ${totalChars} selected`, `已选 ${testState.checked.size} / ${totalChars}`)}</span></div>
+          <div>
+            <b>${t('Random 48-Character Map', '随机 48 字摸底图')}</b>
+            <span class="muted" style="font-size:12.5px;margin-left:6px">${t(`${testState.checked.size} / ${totalChars} selected (est. ~${estPreview} chars)`, `已选 ${testState.checked.size} / ${totalChars} 字（初估 ~${estPreview} 字）`)}</span>
+          </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="audio-btn" style="min-height:32px;padding:4px 10px;font-size:12px" onclick="reshuffleChecklist()">🎲 ${t('New Random Set', '换一批随机字')}</button>
             <button class="audio-btn" style="min-height:32px;padding:4px 10px;font-size:12px" onclick="toggleCheckAll(true)">${t('Select All', '全选')}</button>
@@ -1669,8 +1716,9 @@ function renderTestCenter() {
         </div>
         <div class="check-grid">${btns}</div>
       </div>
-      <div style="margin-top:14px">
-        <button class="cta" onclick="proceedToCalibration()"><span>${t('Continue to 5-Question Calibration', '选好了，进入 5 题校准')}</span><span>→</span></button>
+      <div style="margin-top:14px;display:grid;gap:8px">
+        <button class="cta" onclick="proceedToCalibration()"><span>${t(`Step 2: Start 5-Question Calibration (${testState.checked.size} selected) →`, `第 2 步：选好了（已选 ${testState.checked.size} 字），开始 5 题校准 →`)}</span><span>→</span></button>
+        <button class="cta ghost" style="margin-top:0" onclick="testState.mode='hub';renderTestCenter()"><span>${t('← Back to Checkup Hub', '← 返回测评中心')}</span><span></span></button>
       </div>
     `;
     return;
@@ -1684,7 +1732,7 @@ function renderTestCenter() {
       ? t('Lit Spot-Check (right = brighter · wrong = dimmer)', '已点亮字抽查（答对升亮 · 答错降级）')
       : q.kind === 'frontier'
       ? t('Frontier Probe (right = Soft Glow Lv.1)', '前沿程度探底（答对微亮 Lv.1）')
-      : t('Calibration Question (right = +1 brightness)', '真伪校准题（答对点亮 Lv.1）');
+      : t('Placement Verification (calibrates level only)', '摸底真伪校准（仅定级，不改星图）');
 
     const optsHTML = q.opts.map(o => {
       let cls = '';
@@ -1698,11 +1746,13 @@ function renderTestCenter() {
     let fbText = '';
     if (done) {
       const lastRes = testState.results[testState.results.length - 1];
-      const deltaNote = lastRes.newLvl > lastRes.oldLvl
-        ? t(`Brightness upgraded: ${levelMeta(lastRes.oldLvl).label} → <b>${levelMeta(lastRes.newLvl).label}</b>`, `亮度提升：${levelMeta(lastRes.oldLvl).label} → <b>${levelMeta(lastRes.newLvl).label}</b>`)
-        : (lastRes.newLvl < lastRes.oldLvl
-          ? t(`⚠️ Missed spot-check: dimmed to <b>${levelMeta(lastRes.newLvl).label}</b>`, `⚠️ 抽查未通过：亮度降为 <b>${levelMeta(lastRes.newLvl).label}</b>`)
-          : t(`Kept at <b>${levelMeta(lastRes.newLvl).label}</b>`, `保持 <b>${levelMeta(lastRes.newLvl).label}</b>`));
+      const deltaNote = testState.mode === 'calibrate'
+        ? t('Used to calibrate your starting frontier (Map stays unchanged).', '已记入摸底校准精度（保持星图未批量点亮）。')
+        : (lastRes.newLvl > lastRes.oldLvl
+          ? t(`Brightness upgraded: ${levelMeta(lastRes.oldLvl).label} → <b>${levelMeta(lastRes.newLvl).label}</b>`, `亮度提升：${levelMeta(lastRes.oldLvl).label} → <b>${levelMeta(lastRes.newLvl).label}</b>`)
+          : (lastRes.newLvl < lastRes.oldLvl
+            ? t(`⚠️ Missed spot-check: dimmed to <b>${levelMeta(lastRes.newLvl).label}</b>`, `⚠️ 抽查未通过：亮度降为 <b>${levelMeta(lastRes.newLvl).label}</b>`)
+            : t(`Kept at <b>${levelMeta(lastRes.newLvl).label}</b>`, `保持 <b>${levelMeta(lastRes.newLvl).label}</b>`)));
       fbText = (isOk
         ? t('<b>✓ Correct!</b> ', '<b>✓ 回答正确！</b> ')
         : t(`<b>✗ Not quite — the answer is “${q.g}” (${q.py}).</b> `, `<b>✗ 答错了，正确答案是「${q.g}」(${q.py})。</b> `)) + deltaNote;
@@ -1736,19 +1786,24 @@ function renderTestCenter() {
     const listRows = testState.results.map(r => {
       const mOld = levelMeta(r.oldLvl);
       const mNew = levelMeta(r.newLvl);
-      const statusTxt = r.newLvl > r.oldLvl
-        ? t('✨ Brightened', '✨ 升级点亮')
-        : (r.newLvl < r.oldLvl ? t('⚠️ Dimmed / Reset', '⚠️ 答错降级') : (r.ok ? t('✓ Confirmed', '✓ 稳固保持') : t('○ Unlit', '○ 未点亮')));
+      const statusTxt = testState.testKind === 'calibrate'
+        ? (r.ok ? t('✓ Verified for Placement', '✓ 校准答对（已计入水平）') : t('✗ Missed in Placement', '✗ 校准未对（已下调边界）'))
+        : (r.newLvl > r.oldLvl
+          ? t('✨ Brightened', '✨ 升级点亮')
+          : (r.newLvl < r.oldLvl ? t('⚠️ Dimmed / Reset', '⚠️ 答错降级') : (r.ok ? t('✓ Confirmed', '✓ 稳固保持') : t('○ Unlit', '○ 未点亮'))));
+      const lvlSub = testState.testKind === 'calibrate'
+        ? t(`Map unchanged (${mNew.short} ${mNew.label})`, `星图保持不变（${mNew.short} ${mNew.label}）`)
+        : `${mOld.short} ${mOld.label} → ${mNew.short} ${mNew.label}`;
       return `
         <div class="delta-row">
           <div style="display:flex;align-items:center;gap:10px">
             <span class="dg">${r.g}</span>
             <div>
               <b>${statusTxt}</b>
-              <small class="muted" style="display:block;font-size:12px">${mOld.short} ${mOld.label} → ${mNew.short} ${mNew.label}</small>
+              <small class="muted" style="display:block;font-size:12px">${lvlSub}</small>
             </div>
           </div>
-          <button class="audio-btn" style="min-height:34px;padding:5px 12px;font-size:12.5px" onclick="openCharStudio('${r.g}')">${r.ok ? t('Inspect', '查看') : t('Re-learn →', '去重学 →')}</button>
+          <button class="audio-btn" style="min-height:34px;padding:5px 12px;font-size:12.5px" onclick="openCharStudio('${r.g}')">${r.ok ? t('Study / Inspect', '去学 / 查看') : t('Learn →', '去学习 →')}</button>
         </div>`;
     }).join('');
 
@@ -1756,12 +1811,12 @@ function renderTestCenter() {
       <div class="plan-card">
         <div class="label">${title} <span>${t('Score', '正确率')} ${okCount} / ${testState.results.length}</span></div>
         <h2 class="serif" style="margin:8px 0 4px">${testState.testKind === 'calibrate'
-          ? t(`Est. Vocabulary ~${stats.estChars} Chars · ${stats.lit} Lit`, `估算水平约 ${stats.estChars} 字 · 实点亮 ${stats.lit} 字`)
+          ? t(`Est. Vocabulary ~${stats.estChars} Chars · ${stats.lit} Lit on Map`, `估算识字水平约 ${stats.estChars} 字 · 星图实点亮 ${stats.lit} 字`)
           : t(`${stats.lit} Characters Lit (~ ${stats.knownWords} words)`, `当前星图已点亮 ${stats.lit} 字（覆盖约 ${stats.knownWords} 词）`)}</h2>
         <p class="muted" style="margin:0">
           ${testState.testKind === 'calibrate'
-            ? t(`Level calibrated! Random characters and words will now start near Frontier #${(p.frontierIndex||0)+1} (skipping basic beginner words). Only directly tested characters gained Soft Glow ◐ — other map stars stay unlit until you learn or test them.`,
-                `摸底定级完成！后续随机推字与词库推荐将直接从你的前沿 #${(p.frontierIndex||0)+1} 匹配（跳过简单基础词）。本轮仅实际答对的校准字获得「基础微亮 ◐」，其余未学未测汉字保持未点亮，学一字测一字再点亮。`)
+            ? t(`Level calibrated! Random characters and recommended words will now start near Frontier #${(p.frontierIndex||0)+1} (skipping overly basic beginner words). No untested characters were lit on your Character Map — characters light up only when you study or test them.`,
+                `摸底定级完成！后续随机推字与词库推荐将直接从你的前沿 #${(p.frontierIndex||0)+1} 匹配（跳过太简单的初级词）。本次摸底不会批量点亮星图上的字，保持零误亮 — 每个字只在真正学过、测过之后才点亮。`)
             : t(`${upgraded.length} character(s) brightened and ${downgraded.length} dimmed/unlit in this session.`,
                 `本轮共有 ${upgraded.length} 个字亮度升级，${downgraded.length} 个字因答错降级或熄灭。`)}
         </p>
