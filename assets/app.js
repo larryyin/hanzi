@@ -30,11 +30,10 @@ function applyStaticI18n() {
   const setHtml = (sel, html) => { const el = $(sel); if (el) el.innerHTML = html; };
 
   setTxt('#brandTitle', t('Zoey Learns Hanzi', 'Zoey学汉字'));
-  setTxt('#brandSub', t('Character Map · Light Up All 3,837 Hanzi', '汉字星图 · 点亮全部 3,837 字'));
   setTxt('#langToggleBtn', t('🌐 中文', '🌐 EN'));
   setHtml('#bylineText', t(
-    '<span class="slogan-main">✨ One Character at a Time — Light Up All 3,837 Characters on Your Map!</span><span class="byline-credit">By <b>Larry Yin</b></span>',
-    '<span class="slogan-main">✨ 一字一星光 —— 点亮属于你的全部 3,837 个汉字星图！</span><span class="byline-credit"><b>Larry Yin</b> 出品</span>'
+    '<span class="slogan-main">✨ One Character at a Time — Light Up Your Entire Character Map!</span><span class="byline-credit">By <b>Larry Yin</b></span>',
+    '<span class="slogan-main">✨ 一字一星光 —— 点亮属于你的整张汉字星图！</span><span class="byline-credit"><b>Larry Yin</b> 出品</span>'
   ));
 
   const msi = $('#mapSearchInput');
@@ -129,7 +128,7 @@ const TIERS = [
   { id: 3, enName: 'Tier 3 · Story & Action', zhName: '三阶 · 进阶星域', enShort: 'Tier 3', zhShort: '三阶', start: 800, end: 1500, enDesc: 'Stories, feelings & actions', zhDesc: '叙事动作与事物描写' },
   { id: 4, enName: 'Tier 4 · Fluent Reading', zhName: '四阶 · 熟练星域', enShort: 'Tier 4', zhShort: '四阶', start: 1500, end: 2300, enDesc: 'News, culture & general reading', zhDesc: '故事新闻与常识阅读' },
   { id: 5, enName: 'Tier 5 · Literary & Idiom', zhName: '五阶 · 畅读星域', enShort: 'Tier 5', zhShort: '五阶', start: 2300, end: 3100, enDesc: 'Written prose, idioms & science', zhDesc: '书面表达与成语典故' },
-  { id: 6, enName: 'Tier 6 · Mastery Finale', zhName: '六阶 · 博学星域', enShort: 'Tier 6', zhShort: '六阶', start: 3100, end: 3837, enDesc: 'Level-1 table completion & nuance', zhDesc: '一级字表收官与雅字' }
+  { id: 6, enName: 'Tier 6 · Mastery Finale', zhName: '六阶 · 博学星域', enShort: 'Tier 6', zhShort: '六阶', start: 3100, end: HANZI_CHARS.length, enDesc: 'Level-1 table completion & nuance', zhDesc: '一级字表收官与雅字' }
 ];
 function tierName(tier) { return t(tier.enName, tier.zhName); }
 function tierShort(tier) { return t(tier.enShort, tier.zhShort); }
@@ -781,7 +780,7 @@ function renderMap() {
 
   const dailyCount = getDailyCount(p);
   const dailyGoal = 5;
-  const nextMilestone = [10, 25, 50, 100, 250, 500, 1000, 2000, 3837].find(m => m > stats.lit) || 3837;
+  const nextMilestone = [10, 25, 50, 100, 250, 500, 1000, 2000, CHAR_DB_LIST.length].find(m => m > stats.lit) || CHAR_DB_LIST.length;
   const recentHTML = (p.recentChars || []).slice(0, 6).map(g =>
     `<button class="quick-char-btn" onclick="openCharStudio('${g}')" title="${t('Continue studying ', '继续学习 ')}${g}">${g}</button>`
   ).join('');
@@ -867,7 +866,7 @@ function renderMap() {
   `;
 
   $('#tierFilters').innerHTML = [
-    { id: 0, label: t('All (3837)', '全部 (3837)') },
+    { id: 0, label: t(`All (${CHAR_DB_LIST.length})`, `全部 (${CHAR_DB_LIST.length})`) },
     ...TIERS.map(tObj => ({ id: tObj.id, label: tierShort(tObj) + ' (' + (tObj.end - tObj.start) + ')' }))
   ].map(x => `<button class="${mapState.tierFilter === x.id ? 'active' : ''}" onclick="setTierFilter(${x.id})">${x.label}</button>`).join('');
 
@@ -1183,7 +1182,7 @@ function renderCharStudio() {
         </div>
       </div>
       <div style="margin-top:18px">
-        <div class="kv"><b>${t('Strokes & Rank', '笔画与位置')}</b><span>${escapeHTML(formatStrokes(ch))} · ${t(`Frequency #${ch.index + 1} / 3837`, `难度序 #${ch.index + 1} / 3837`)}</span></div>
+        <div class="kv"><b>${t('Strokes & Rank', '笔画与位置')}</b><span>${escapeHTML(formatStrokes(ch))} · ${t(`Frequency #${ch.index + 1} / ${CHAR_DB_LIST.length}`, `难度序 #${ch.index + 1} / ${CHAR_DB_LIST.length}`)}</span></div>
         <div class="kv"><b>${t('Origin & Components', '字源与部件拆解')}</b><span style="text-align:left;max-width:72%">${escapeHTML(ch.radicalNote)}</span></div>
       </div>
       ${polyHTML}
