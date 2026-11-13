@@ -1698,9 +1698,6 @@ function renderTestCenter() {
           <div><b>① ${t('Tap Characters You Know Below:', '在下方点选你认识的汉字：')}</b> ${t('Below are 48 characters sampled randomly across all difficulty levels (none pre-selected). Tap every character whose sound & meaning you already know; leave unfamiliar ones blank.', '下方是从全字库随机抽取的 48 个汉字（默认全未选）。请点击所有你已经认识（知道读音和意思）的字，不认识的留空。')}</div>
           <div><b>② ${t('5-Question Verification:', '完成 5 题真伪校准：')}</b> ${t('When finished, click the green button below the grid to answer 5 quick multiple-choice questions that verify your vocabulary size & starting frontier.', '点选完成后，点击字表底部的绿色按钮回答 5 道快速选择题，系统会校准你的真实识字量与推荐起点。')}</div>
         </div>
-        <div class="notice" style="margin-top:10px">
-          <b>💡 ${t('Map Stays Clean (No Bulk Light-Up):', '不会批量点亮星图：')}</b> ${t('This placement test only calibrates your difficulty level for recommendations — it will NOT bulk-light characters on your Character Map. Characters light up only after you study or test them.', '摸底测试仅用于测定水平、跳过太简单的基础词，绝不会整批点亮星图！星图上的字只会在你真正学过、测过之后才点亮。')}
-        </div>
       </div>
       <div class="check-tier">
         <div class="check-tier-head">

@@ -33,7 +33,8 @@ button{font:inherit;cursor:pointer;color:inherit}
 /* Topbar */
 .topbar{display:flex;justify-content:space-between;align-items:center;padding:18px 0 6px;gap:10px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px;background:none;border:none;padding:0;text-align:left}
-.brand-logo{width:46px;height:46px;border-radius:13px;display:block;box-shadow:0 6px 16px rgba(182,78,61,.22);transition:transform .2s ease;flex-shrink:0}
+.brand-logo{width:52px;height:52px;border-radius:14px;display:block;box-shadow:0 6px 16px rgba(216,91,23,.25);transition:transform .2s ease;flex-shrink:0;overflow:hidden}
+.brand-logo svg{width:100%;height:100%;display:block}
 .brand:hover .brand-logo{transform:translateY(-1px) rotate(-2deg)}
 .brand b{font-size:18px;letter-spacing:-.02em;line-height:1}
 .brand span{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);font-weight:600;margin-top:3px}
