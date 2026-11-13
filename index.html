@@ -171,9 +171,15 @@ h3{margin:18px 0 6px;font-size:16px}
 .cnode.frontier-mark{outline:2px dashed var(--cinnabar);outline-offset:1px}
 
 /* Backbar */
-.backbar{padding:14px 0 2px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.back-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 15px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font-weight:700;font-size:14px;min-height:42px;box-shadow:var(--shadow)}
-.back-btn:active{transform:scale(.98)}
+.backbar{position:sticky;top:8px;z-index:40;padding:8px 0 4px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;pointer-events:none}
+.backbar>*{pointer-events:auto}
+.backbar-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;border:1.5px solid var(--line);background:color-mix(in srgb, var(--card) 92%, transparent);backdrop-filter:blur(10px);font-weight:700;font-size:13.5px;min-height:40px;box-shadow:var(--shadow);transition:transform .14s,border-color .14s,box-shadow .14s}
+.back-btn:hover{border-color:var(--bamboo)}
+.back-btn:active{transform:scale(.97)}
+.back-btn.origin{background:var(--bamboo-light);border-color:var(--lvl1-border);color:var(--bamboo2)}
+:where(button,input,[tabindex]):focus-visible{outline:2px solid var(--bamboo);outline-offset:2px}
+.return-highlight{border-color:var(--gold)!important;box-shadow:0 0 0 3px rgba(193,154,75,.38), var(--shadow)!important;transition:box-shadow .3s ease,border-color .3s ease}
 
 /* Char Learning Studio */
 .studio-card{background:var(--card);border:1px solid var(--line);border-radius:26px;overflow:hidden;box-shadow:var(--shadow);margin-top:10px}
@@ -290,13 +296,47 @@ h3{margin:18px 0 6px;font-size:16px}
 .la-fb.good{background:var(--bamboo-light);border:1px solid var(--bamboo)}
 .la-fb.bad{background:var(--cinnabar-light);border:1px solid #E8B4AA}
 .la-again{margin-top:10px;width:100%;padding:11px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);font-weight:700;min-height:42px}
-.idx-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.idx-chip{border:1.5px solid var(--line);background:var(--bg);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600}
-.poly-read{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
-.poly-py{color:var(--bamboo);font-weight:800;font-size:16px}
-.poly-py span{color:var(--ink2);font-weight:600;font-size:13px}
-.poly-words{display:flex;flex-direction:column;gap:6px;margin-top:7px}
-.poly-chip{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1.5px solid var(--line);background:var(--bg);border-radius:12px;padding:8px 12px;text-align:left}
+.idx-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.idx-chip{border:1.5px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 11px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:5px;transition:transform .12s,border-color .12s}
+.idx-chip:hover{transform:translateY(-1px);border-color:var(--bamboo)}
+.idx-chip.lvl1{background:var(--lvl1-bg);border-color:var(--lvl1-border);color:var(--lvl1-ink)}
+.idx-chip.lvl2{background:var(--bamboo);border-color:var(--bamboo2);color:#fff}
+.idx-chip.lvl3{background:linear-gradient(145deg,var(--bamboo),#2B5742);border-color:var(--gold);color:#FFF7DE}
+.idx-chip .ic-v{font-size:11px;opacity:.9}
+.poly-dash{background:radial-gradient(600px 180px at 90% -10px, rgba(59,110,85,.12), transparent), var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-top:10px}
+.poly-dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+@media(max-width:520px){.poly-dash-stats{grid-template-columns:1fr}}
+.poly-toolbar{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+.poly-quiz-modes{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.poly-quiz-modes button{padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:12px;font-weight:700;color:var(--ink2)}
+.poly-quiz-modes button.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.poly-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:12px;transition:box-shadow .2s,border-color .2s;scroll-margin-top:68px}
+.poly-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.poly-char-id{display:flex;align-items:center;gap:12px}
+.poly-tile{min-width:60px;min-height:60px;border-radius:15px;padding:6px 10px}
+.poly-tile .cg{font-size:28px}
+.poly-card-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.poly-card-actions{display:flex;gap:6px;flex-wrap:wrap}
+.poly-card-actions .audio-btn{min-height:36px;padding:6px 11px;font-size:12.5px}
+.poly-branch{border:1px solid var(--line);background:var(--bg);border-radius:16px;padding:12px}
+.poly-branch-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.poly-py{color:var(--bamboo);font-weight:800;font-size:16px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.poly-sense-tag{font-size:12.5px;font-weight:600;color:var(--ink2);background:var(--card);border:1px solid var(--line);padding:3px 9px;border-radius:999px}
+.poly-words{display:flex;flex-direction:column;gap:7px}
+.poly-word-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 11px;flex-wrap:wrap}
+.poly-word-main{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.poly-word-top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.poly-word-zh{font-family:"Noto Serif SC",serif;font-size:21px;font-weight:900;line-height:1.15}
+.poly-word-zh mark{background:var(--gold-bg);color:var(--cinnabar);padding:0 3px;border-radius:5px}
+.poly-word-py{font-size:13px;font-weight:700;color:var(--bamboo)}
+.poly-word-en{font-size:12.5px;color:var(--ink2);line-height:1.4}
+.poly-word-tools{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.partner-pill{border:1px dashed var(--line2);background:var(--bg);border-radius:999px;padding:3px 8px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:3px}
+.partner-pill:hover{border-color:var(--bamboo);color:var(--bamboo)}
+.partner-pill.lit{background:var(--bamboo-light);border-style:solid;border-color:var(--lvl1-border);color:var(--bamboo2)}
+.poly-mini-btn{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 9px;font-size:12px;font-weight:700;min-height:30px}
+.poly-mini-btn:hover{border-color:var(--bamboo);color:var(--bamboo)}
+.poly-sent-preview{margin-top:8px;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:13.5px}
 
 /* Learner Switcher */
 .learner-footer{margin-top:42px;padding-top:16px;border-top:1px solid var(--line)}
@@ -401,19 +441,58 @@ h3{margin:18px 0 6px;font-size:16px}
     <div id="lookalikes"></div>
   </div>
 
-  <!-- POLYPHONES SUBVIEW -->
+  <!-- POLYPHONES SUBVIEW (89 multi-reading chars) -->
   <div class="view" id="view-polyphones">
-    <div class="backbar"><button class="back-btn" onclick="navBack()"><span data-backlabel data-fallback="explore">← Back</span></button></div>
-    <div style="padding:12px 0 6px">
-      <h1 class="serif" id="polyHeading" style="font-size:30px;margin:0">Polyphones & Multiple Meanings</h1>
-      <p class="muted" id="polyIntro" style="margin:6px 0 0">89 polyphonic characters (182 readings) + 12 multi-sense characters learned in real word context.</p>
+    <div class="backbar">
+      <button class="back-btn" onclick="navBack()"><span data-backlabel data-fallback="explore">← Back</span></button>
+      <button class="back-btn" id="toSemyBtn" onclick="showView('polysemy')">💡 <span id="toSemyLabel">Multiple Meanings (12)</span> →</button>
     </div>
-    <div class="la-card" id="polyQuizCard"><div class="label"><span id="polyQuizTitle">Reading Quiz</span><span id="polyQuizScore">Pick the reading in context</span></div><div id="polyQuizBox" style="margin-top:10px"></div></div>
-    <h2 class="serif" id="polyListHeading" style="font-size:22px;margin:22px 0 0">All Polyphones</h2>
-    <div id="polyIndex" style="margin-top:10px"></div>
-    <div class="grid" id="polyGrid" style="margin-top:12px"></div>
-    <h2 class="serif" id="polySemyHeading" style="font-size:22px;margin:24px 0 0">Same Sound, Different Meanings</h2>
-    <div class="grid" id="polySemy" style="margin-top:12px"></div>
+    <div style="padding:10px 0 4px">
+      <h1 class="serif" id="polyHeading" style="font-size:30px;margin:0">Polyphones · One Char, Multiple Sounds</h1>
+      <p class="muted" id="polyIntro" style="margin:6px 0 0">89 polyphonic characters (182 readings) whose pronunciation changes depending on the word.</p>
+    </div>
+    <div id="polyDash"></div>
+    <div class="la-card" id="polyQuizCard">
+      <div class="label"><span id="polyQuizTitle">Context Reading Trainer</span><span id="polyQuizScore">Pick the reading in context</span></div>
+      <div class="poly-quiz-modes" id="polyQuizModes"></div>
+      <div id="polyQuizBox" style="margin-top:10px"></div>
+    </div>
+    <div class="poly-toolbar" id="polyToolbar">
+      <input class="search" id="polySearchInput" placeholder="Search character, pinyin (e.g. xing, hang), or English…" oninput="onPolySearch(this.value)">
+      <div class="filters" id="polyStatusTabs"></div>
+    </div>
+    <div id="polyIndex" style="margin-top:12px"></div>
+    <div id="polyListSection">
+      <h2 class="serif" id="polyListHeading" style="font-size:22px;margin:22px 0 0">All Polyphones (89)</h2>
+      <div class="grid" id="polyGrid" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <!-- MULTIPLE MEANINGS SUBVIEW (12 same-sound multi-sense chars) -->
+  <div class="view" id="view-polysemy">
+    <div class="backbar">
+      <button class="back-btn" onclick="navBack()"><span data-backlabel data-fallback="explore">← Back</span></button>
+      <button class="back-btn" id="toPolyBtn" onclick="showView('polyphones')">🔀 <span id="toPolyLabel">Polyphones (89)</span> →</button>
+    </div>
+    <div style="padding:10px 0 4px">
+      <h1 class="serif" id="polySemyHeading" style="font-size:30px;margin:0">Multiple Meanings · Same Sound, Different Senses</h1>
+      <p class="muted" id="polySemyIntro" style="margin:6px 0 0">12 high-frequency characters (34 senses) that keep the same pronunciation while shifting meaning across words.</p>
+    </div>
+    <div id="semyDash"></div>
+    <div class="la-card" id="semyQuizCard">
+      <div class="label"><span id="semyQuizTitle">Context Meaning Trainer</span><span id="semyQuizScore">Pick the meaning in context</span></div>
+      <div class="poly-quiz-modes" id="semyQuizModes"></div>
+      <div id="semyQuizBox" style="margin-top:10px"></div>
+    </div>
+    <div class="poly-toolbar" id="semyToolbar">
+      <input class="search" id="semySearchInput" placeholder="Search character, pinyin, sense, or word…" oninput="onSemySearch(this.value)">
+      <div class="filters" id="semyStatusTabs"></div>
+    </div>
+    <div id="semyIndex" style="margin-top:12px"></div>
+    <div id="polySemySection">
+      <h2 class="serif" id="semyListHeading" style="font-size:22px;margin:22px 0 0">All Multi-Sense Characters (12)</h2>
+      <div class="grid" id="polySemy" style="margin-top:12px"></div>
+    </div>
   </div>
 
   <!-- 4. SAVED VIEW -->
@@ -429,7 +508,10 @@ h3{margin:18px 0 6px;font-size:16px}
   <!-- CHAR LEARNING STUDIO (IMMERSIVE) -->
   <div class="view" id="view-char-studio">
     <div class="backbar">
-      <button class="back-btn" onclick="navBack()"><span data-backlabel data-fallback="map">← Back</span></button>
+      <div class="backbar-left">
+        <button class="back-btn" onclick="navBack()"><span data-backlabel data-fallback="map">← Back</span></button>
+        <button class="back-btn origin" id="originBackBtn" style="display:none" onclick="navBackToOrigin()"></button>
+      </div>
       <button class="back-btn" id="studioRandomBtn" onclick="learnRandomChar()">🎲 Another Random Char</button>
     </div>
     <div id="studioBody"></div>
@@ -8312,11 +8394,21 @@ function applyStaticI18n() {
   setTxt('#laHeading', t('Look-alikes · 28 Pairs', '形近字 · 28 对辨析'));
   setTxt('#laIntro', t('Confusable pairs with side-by-side diffs and no-pinyin blind quizzes. Tap any character to open its learning studio.', '28 对易混字对比辨析与无拼音盲测。点击单字可直接进入该字学习舱。'));
 
-  setTxt('#polyHeading', t('Polyphones & Multiple Meanings', '多音字与多义字'));
-  setTxt('#polyIntro', t('89 polyphonic characters (182 readings) + 12 multi-sense characters learned in real word context.', '89 个多音字（182 个读音）+ 12 个同音多义字，在词组语境中准确区分。'));
-  setTxt('#polyQuizTitle', t('Reading Quiz', '读音快测'));
-  setTxt('#polyListHeading', t('All Polyphones', '多音字总表'));
-  setTxt('#polySemyHeading', t('Same Sound, Different Meanings', '同音不同义'));
+  setTxt('#polyHeading', t('Polyphones · One Char, Multiple Sounds', '多音字 · 一字多音'));
+  setTxt('#polyIntro', t('89 polyphonic characters (182 readings) whose pronunciation changes depending on the word.', '89 个多音字（182 个读音），在真实词组中区分不同发音与词义。'));
+  setTxt('#toSemyLabel', t('Multiple Meanings (12)', '多义字专项 (12)'));
+  setTxt('#polyQuizTitle', t('Context Reading Trainer', '语境读音训练'));
+  const psi = $('#polySearchInput');
+  if (psi) psi.placeholder = t('Search character, pinyin (e.g. xing, hang), or English…', '搜多音字、拼音（如 xing, hang）或英文词义…');
+  setTxt('#polyListHeading', t('All Polyphones (89)', '多音字总表（89字）'));
+
+  setTxt('#polySemyHeading', t('Multiple Meanings · Same Sound, Different Senses', '多义字 · 同音不同义'));
+  setTxt('#polySemyIntro', t('12 high-frequency characters (34 senses) that keep the same pronunciation while shifting meaning across words.', '12 个高频多义字（34 种常见义项），读音相同但在不同词组中含义截然不同。'));
+  setTxt('#toPolyLabel', t('Polyphones (89)', '多音字专项 (89)'));
+  setTxt('#semyQuizTitle', t('Context Meaning Trainer', '语境词义训练'));
+  const ssi = $('#semySearchInput');
+  if (ssi) ssi.placeholder = t('Search character, pinyin, sense, or word…', '搜多义字、拼音、义项或词汇…');
+  setTxt('#semyListHeading', t('All Multi-Sense Characters (12)', '同音多义字总表（12字）'));
 
   setTxt('#savedHeading', t('Saved', '我的收藏'));
   const pName = escapeHTML(currentProfile().name);
@@ -8351,6 +8443,7 @@ function renderAllViews() {
   renderExplore();
   renderLookalikes();
   renderPolyphones();
+  renderPolysemyView();
   renderTestCenter();
   renderSaved();
   if (currentView === 'char-studio' && studioState.charObj) renderCharStudio();
@@ -8500,7 +8593,8 @@ function makeProfile(name, isDefault) {
     estWords: isDefault ? 8 : 0,
     studiedSinceTest: 0,
     recentChars: isDefault ? ['是', '我', '好', '你'] : [],
-    testHistory: []
+    testHistory: [],
+    polyMastered: {}
   };
 }
 
@@ -8509,7 +8603,9 @@ function loadProfiles() {
     const raw = localStorage.getItem(LS_PROFILES_KEY);
     if (raw) {
       const arr = JSON.parse(raw);
-      if (Array.isArray(arr) && arr.length) return arr.filter(p => p && p.id && p.name);
+      if (Array.isArray(arr) && arr.length) {
+        return arr.filter(p => p && p.id && p.name).map(p => ({ ...p, polyMastered: p.polyMastered || {} }));
+      }
     }
   } catch (e) {}
   return null;
@@ -8533,6 +8629,15 @@ function currentProfile() { return profiles.find(p => p.id === currentId) || pro
 function getCharLevel(g) {
   const p = currentProfile();
   return (p.charLevels && p.charLevels[g]) ? p.charLevels[g] : 0;
+}
+function isPolyMastered(g) {
+  const p = currentProfile();
+  return Boolean(p.polyMastered && p.polyMastered[g]);
+}
+function markPolyMastered(g) {
+  const p = currentProfile();
+  if (!p.polyMastered) p.polyMastered = {};
+  p.polyMastered[g] = true;
 }
 function setCharLevel(g, lvl) {
   const p = currentProfile();
@@ -8608,7 +8713,7 @@ function shuffleArr(arr) {
   return a;
 }
 
-// ---------- 4. Navigation Stack ----------
+// ---------- 4. Origin-Aware Navigation Stack & Scroll Restoration ----------
 function viewLabel(name) {
   const labels = {
     map: t('Char Map', '汉字星图'),
@@ -8617,6 +8722,7 @@ function viewLabel(name) {
     saved: t('Saved', '我的收藏'),
     lookalikes: t('Look-alikes', '形近字'),
     polyphones: t('Polyphones', '多音字'),
+    polysemy: t('Multiple Meanings', '多义字'),
     'char-studio': t('Char Studio', '单字学习舱'),
     'word-detail': t('Word Card', '词条详情')
   };
@@ -8625,6 +8731,57 @@ function viewLabel(name) {
 let navStack = [];
 let currentView = 'map';
 let currentWordId = null;
+let lastNavScrollToken = 0;
+
+function scrollIntoViewAsync(element, options) {
+  if (!element || typeof element.scrollIntoView !== 'function') return Promise.resolve();
+  const result = element.scrollIntoView(options);
+  if (result && typeof result.then === 'function') return result;
+  return new Promise(resolve => {
+    let tid;
+    const finish = () => {
+      clearTimeout(tid);
+      if (typeof window.removeEventListener === 'function') {
+        window.removeEventListener('scrollend', finish);
+        window.removeEventListener('scroll', onScroll);
+      }
+      resolve();
+    };
+    const onScroll = () => {
+      clearTimeout(tid);
+      tid = setTimeout(finish, 90);
+    };
+    if (typeof window.addEventListener === 'function') {
+      window.addEventListener('scrollend', finish, { once: true });
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+    tid = setTimeout(finish, 90);
+  });
+}
+
+async function flashReturnAnchor(anchorId) {
+  if (!anchorId) return;
+  const el = document.getElementById(anchorId);
+  if (!el) return;
+  const token = ++lastNavScrollToken;
+  if (typeof el.getBoundingClientRect === 'function' && typeof window.innerHeight === 'number') {
+    const rect = el.getBoundingClientRect();
+    const outOfView = rect.top < 56 || rect.bottom > window.innerHeight - 64;
+    if (outOfView) {
+      await scrollIntoViewAsync(el, { behavior: 'smooth', block: 'center' });
+    }
+  }
+  if (token !== lastNavScrollToken) return;
+  el.classList.add('return-highlight');
+  setTimeout(() => el.classList.remove('return-highlight'), 1900);
+}
+
+function getOriginNavEntry() {
+  for (let i = navStack.length - 1; i >= 0; i--) {
+    if (navStack[i].view !== currentView) return { entry: navStack[i], idx: i };
+  }
+  return null;
+}
 
 function activateView(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -8635,35 +8792,67 @@ function activateView(name) {
   document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('active', b.dataset.nav === tabFor));
   if (name === 'map') renderMap();
   if (name === 'test') renderTestCenter();
+  if (name === 'polyphones') renderPolyphones();
+  if (name === 'polysemy') renderPolysemyView();
   if (name === 'saved') renderSaved();
   updateBackUI();
 }
 function updateBackUI() {
-  const target = navStack.length ? navStack[navStack.length - 1].view : null;
+  const topEntry = navStack.length ? navStack[navStack.length - 1] : null;
+  const target = topEntry ? topEntry.view : null;
   document.querySelectorAll('[data-backlabel]').forEach(el => {
     const dest = target || el.dataset.fallback;
     const lbl = viewLabel(dest);
-    el.textContent = t('← Back', '← 返回') + (lbl ? (uiLang === 'zh' ? ' ' + lbl : ' to ' + lbl) : '');
+    const ctxChar = topEntry && topEntry.contextChar && topEntry.view !== 'char-studio' ? topEntry.contextChar : '';
+    const base = t('← Back', '← 返回') + (lbl ? (uiLang === 'zh' ? ' ' + lbl : ' to ' + lbl) : '');
+    el.textContent = ctxChar ? (uiLang === 'zh' ? `${base}（${ctxChar}）` : `${base} (${ctxChar})`) : base;
   });
   document.querySelectorAll('[data-backwrap]').forEach(el => {
     el.style.display = navStack.length ? 'flex' : 'none';
   });
+  const originBtn = $('#originBackBtn');
+  if (originBtn) {
+    const orig = getOriginNavEntry();
+    const showOrigin = currentView === 'char-studio' && orig && orig.idx < navStack.length - 1;
+    originBtn.style.display = showOrigin ? 'inline-flex' : 'none';
+    if (showOrigin) {
+      const lbl = viewLabel(orig.entry.view);
+      const ctx = orig.entry.contextChar ? (uiLang === 'zh' ? `（${orig.entry.contextChar}）` : ` (${orig.entry.contextChar})`) : '';
+      originBtn.textContent = t('↩ Return to ', '↩ 直回') + lbl + ctx;
+    }
+  }
 }
-function navGo(name) {
-  if (name === currentView) { window.scrollTo({ top: 0, behavior: 'instant' }); return; }
-  navStack.push({ view: currentView, scroll: window.scrollY || window.pageYOffset || 0 });
+function navGo(name, meta = {}) {
+  navStack.push({
+    view: currentView,
+    scroll: window.scrollY || window.pageYOffset || 0,
+    anchorId: meta.anchorId || null,
+    contextChar: meta.contextChar || null
+  });
   activateView(name);
   window.scrollTo({ top: 0, behavior: 'instant' });
+}
+function restoreViewPosition(entry) {
+  activateView(entry.view);
+  const y = entry.scroll || 0;
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: y, behavior: 'instant' });
+    setTimeout(() => {
+      window.scrollTo({ top: y, behavior: 'instant' });
+      flashReturnAnchor(entry.anchorId);
+    }, 60);
+  });
 }
 function navBack() {
   const prev = navStack.pop();
   if (!prev) { activateView('map'); window.scrollTo({ top: 0, behavior: 'instant' }); return; }
-  activateView(prev.view);
-  const y = prev.scroll || 0;
-  requestAnimationFrame(() => {
-    window.scrollTo({ top: y, behavior: 'instant' });
-    setTimeout(() => window.scrollTo({ top: y, behavior: 'instant' }), 60);
-  });
+  restoreViewPosition(prev);
+}
+function navBackToOrigin() {
+  const orig = getOriginNavEntry();
+  if (!orig) { navBack(); return; }
+  navStack = navStack.slice(0, orig.idx);
+  restoreViewPosition(orig.entry);
 }
 function showView(name) {
   navStack = [];
@@ -8874,7 +9063,7 @@ function renderMapGrid() {
       const m = levelMeta(l);
       const isFrontier = (ch.index === frontier);
       const badge = l === 3 ? '<span class="cbadge">✦</span>' : (l === 1 ? '<span class="cbadge">◐</span>' : '');
-      return `<button class="cnode ${m.cls}${isFrontier ? ' frontier-mark' : ''}" title="${ch.g} ${ch.py} — ${escapeHTML(ch.enShort)}" onclick="openCharStudio('${ch.g}')">${badge}<span class="cg">${ch.g}</span><span class="cpy">${ch.py}</span></button>`;
+      return `<button id="mapNode-${ch.g}" class="cnode ${m.cls}${isFrontier ? ' frontier-mark' : ''}" title="${ch.g} ${ch.py} — ${escapeHTML(ch.enShort)}" onclick="openCharStudio('${ch.g}')">${badge}<span class="cg">${ch.g}</span><span class="cpy">${ch.py}</span></button>`;
     }).join('');
 
     html += `
@@ -8913,7 +9102,7 @@ let studioState = {
   completedNow: false
 };
 
-function openCharStudio(g, replaceCurrent = false) {
+function openCharStudio(g, replaceCurrent = false, anchorId = null, contextChar = null) {
   const ch = CHAR_DB_MAP.get(g);
   if (!ch) { toast(t('Character not found: ', '未找到汉字：') + g); return; }
 
@@ -8939,7 +9128,13 @@ function openCharStudio(g, replaceCurrent = false) {
     renderCharStudio();
     window.scrollTo({ top: 0, behavior: 'instant' });
   } else {
-    navGo('char-studio');
+    let resolvedAnchor = anchorId;
+    if (!resolvedAnchor) {
+      if (currentView === 'polyphones') resolvedAnchor = 'polyCard-' + (contextChar || g);
+      else if (currentView === 'polysemy') resolvedAnchor = 'semyCard-' + (contextChar || g);
+      else if (currentView === 'map') resolvedAnchor = 'mapNode-' + g;
+    }
+    navGo('char-studio', { anchorId: resolvedAnchor, contextChar: contextChar || g });
     renderCharStudio();
   }
 }
@@ -9102,8 +9297,8 @@ function renderCharStudio() {
   if (st.step === 0) {
     const polyHTML = ch.poly ? (
       ch.poly.type === 'poly'
-        ? `<div class="notice" style="margin-top:14px"><b>🔀 ${t('Polyphone Note:', '多音字提示：')}</b> ${t(`“${ch.g}” has multiple readings:`, `「${ch.g}」有多个读音：`)} ${ch.poly.data.readings.map(r => '<b>' + r.py + '</b> (' + escapeHTML(r.sense) + ')').join(' · ')}.</div>`
-        : `<div class="notice" style="margin-top:14px"><b>💡 ${t('Multiple Meanings:', '一字多义：')}</b> ${t(`“${ch.g}” (${ch.poly.data.py}) shifts meaning by word:`, `「${ch.g}」(${ch.poly.data.py}) 在不同词中含义不同：`)} ${ch.poly.data.senses.map(s => escapeHTML(s.sense)).join(' / ')}.</div>`
+        ? `<div class="notice" style="margin-top:14px"><b>🔀 ${t('Polyphone Note:', '多音字提示：')}</b> ${t(`“${ch.g}” has multiple readings:`, `「${ch.g}」有多个读音：`)} ${ch.poly.data.readings.map(r => '<b>' + r.py + '</b> (' + escapeHTML(r.sense) + ')').join(' · ')}. <button class="text-btn" style="min-height:auto;padding:0 4px" onclick="navGo('polyphones');jumpToPolyCard('${ch.g}')">${t('Compare in Polyphones →', '去多音字对比 →')}</button></div>`
+        : `<div class="notice" style="margin-top:14px"><b>💡 ${t('Multiple Meanings:', '一字多义：')}</b> ${t(`“${ch.g}” (${ch.poly.data.py}) shifts meaning by word:`, `「${ch.g}」(${ch.poly.data.py}) 在不同词中含义不同：`)} ${ch.poly.data.senses.map(s => escapeHTML(s.sense)).join(' / ')}. <button class="text-btn" style="min-height:auto;padding:0 4px" onclick="navGo('polysemy');jumpToSemyCard('${ch.g}')">${t('Explore Senses →', '去多义字对比 →')}</button></div>`
     ) : '';
 
     const laHTML = ch.lookalikes.length ? ch.lookalikes.map(pair => {
@@ -9221,10 +9416,15 @@ function renderCharStudio() {
 
     let resultBanner = '';
     if (allDone && allPassed) {
+      const orig = getOriginNavEntry();
+      const backOriginBtn = orig
+        ? `<button class="cta secondary" style="margin-top:0;grid-column:1 / -1" onclick="navBackToOrigin()"><span>↩ ${t('Return to ', '返回')}${viewLabel(orig.entry.view)}${orig.entry.contextChar ? ' (' + orig.entry.contextChar + ')' : ''}</span><span>→</span></button>`
+        : '';
       resultBanner = `
         <div class="feedback show good" style="margin-top:16px">
           <b>${t('🎉 Character Lit Up!', '🎉 闯关成功！')}</b> ${t(`“<b class="zh" style="font-size:18px">${ch.g}</b>” is now <b>${levelMeta(getCharLevel(ch.g)).label}</b>!`, `汉字「<b class="zh" style="font-size:18px">${ch.g}</b>」已点亮为 <b>${levelMeta(getCharLevel(ch.g)).label}</b>！`)}
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+            ${backOriginBtn}
             <button class="cta" style="margin-top:0" onclick="learnRandomChar()"><span>${t('🎲 Next Random Char', '🎲 随机学下一字')}</span><span>→</span></button>
             <button class="cta ghost" style="margin-top:0" onclick="showView('map')"><span>${t('🗺️ View Character Map', '🗺️ 回星图看点亮')}</span><span></span></button>
           </div>
@@ -9815,7 +10015,12 @@ function renderExplore() {
       </button>
       <button class="la-entry" style="margin-top:10px" onclick="navGo('polyphones')">
         <span class="la-pair-mini">行<i>/</i>乐</span>
-        <span style="flex:1;min-width:0"><b>${t('Polyphones · 89 Chars, 182 Readings', '多音字 · 89 字 182 个读音')}</b><p>${t('Tell apart shifting readings and meanings inside real words.', '在真实词组中区分不同读音与释义。')}</p></span>
+        <span style="flex:1;min-width:0"><b>${t('Polyphones · 89 Chars, 182 Readings', '多音字 · 89 字 182 个读音')}</b><p>${t('One character, different pronunciations & meanings in real words.', '一字多音，在真实词组中区分不同读音与释义。')}</p></span>
+        <span class="la-go">→</span>
+      </button>
+      <button class="la-entry" style="margin-top:10px" onclick="navGo('polysemy')">
+        <span class="la-pair-mini">面<i>·</i>开</span>
+        <span style="flex:1;min-width:0"><b>${t('Multiple Meanings · 12 Chars, 34 Senses', '多义字 · 12 字 34 种义项')}</b><p>${t('Same pronunciation, shifting meanings across everyday words.', '同音不同义，通过搭配词掌握核心引申义。')}</p></span>
         <span class="la-go">→</span>
       </button>
       <h2 class="serif" style="font-size:21px;margin:22px 0 0">${t('Browse Word Bank by Topic (7,618 Words)', '按主题浏览词库（7,618 词）')}</h2>
@@ -9860,11 +10065,13 @@ function toggleSaveWord(id) {
   if (currentView === 'saved') renderSaved();
 }
 
-function openWord(id, replace = false) {
+function openWord(id, replace = false, anchorId = null, contextChar = null) {
   const w = wordById(id);
   if (!w) return;
   currentWordId = id;
-  if (!replace && currentView !== 'word-detail') navGo('word-detail');
+  if (!replace && currentView !== 'word-detail') {
+    navGo('word-detail', { anchorId, contextChar });
+  }
   const p = currentProfile();
   const isSaved = (p.savedWords || []).includes(w.id);
   const charButtons = (w.chars || []).map(c => {
@@ -9959,15 +10166,349 @@ function laRetry(i) {
   document.getElementById('laCard' + i).outerHTML = laCardHTML(i);
 }
 
+const polyState = { status: 'all', query: '', quizMode: 'all' };
+const semyState = { status: 'all', query: '', quizMode: 'all' };
+
 let polyQuiz = { gi: -1, ri: -1, word: null, order: [], answered: false, pick: -1, score: 0, total: 0 };
+let semyQuiz = { gi: -1, si: -1, word: null, order: [], answered: false, pick: -1, score: 0, total: 0 };
+
+function getPolyCharMeta(g) {
+  const lvl = getCharLevel(g);
+  const meta = levelMeta(lvl);
+  const chObj = CHAR_DB_MAP.get(g);
+  const tier = chObj ? TIERS.find(tObj => tObj.id === chObj.tier) : null;
+  const verified = isPolyMastered(g);
+  return { lvl, meta, chObj, tier, verified };
+}
+
+function openCharFromPoly(g, cardChar) {
+  const anchorChar = cardChar || g;
+  openCharStudio(g, false, 'polyCard-' + anchorChar, anchorChar);
+}
+function openWordFromPoly(wordId, cardChar) {
+  openWord(wordId, false, 'polyCard-' + cardChar, cardChar);
+}
+function openCharFromSemy(g, cardChar) {
+  const anchorChar = cardChar || g;
+  openCharStudio(g, false, 'semyCard-' + anchorChar, anchorChar);
+}
+function openWordFromSemy(wordId, cardChar) {
+  openWord(wordId, false, 'semyCard-' + cardChar, cardChar);
+}
+
+function setPolyStatus(st) {
+  polyState.status = (polyState.status === st && st !== 'all') ? 'all' : st;
+  renderPolyphones();
+}
+function onPolySearch(val) {
+  polyState.query = (val || '').trim().toLowerCase();
+  renderPolyLists();
+}
+function setPolyQuizMode(mode) {
+  polyState.quizMode = mode;
+  polyNewQuestion(-1);
+  renderPolyToolbar();
+}
+
+function setSemyStatus(st) {
+  semyState.status = (semyState.status === st && st !== 'all') ? 'all' : st;
+  renderPolysemyView();
+}
+function onSemySearch(val) {
+  semyState.query = (val || '').trim().toLowerCase();
+  renderSemyLists();
+}
+function setSemyQuizMode(mode) {
+  semyState.quizMode = mode;
+  semyNewQuestion(-1);
+  renderSemyToolbar();
+}
+
+async function jumpToSpecialCard(prefix, charG, resetFn) {
+  let el = document.getElementById(prefix + charG);
+  if (!el) {
+    resetFn();
+    el = document.getElementById(prefix + charG);
+  }
+  if (!el) return;
+  await scrollIntoViewAsync(el, { behavior: 'smooth', block: 'center' });
+  el.classList.add('return-highlight');
+  setTimeout(() => el.classList.remove('return-highlight'), 1800);
+}
+function jumpToPolyCard(charG) {
+  return jumpToSpecialCard('polyCard-', charG, () => {
+    polyState.status = 'all';
+    polyState.query = '';
+    const psi = $('#polySearchInput');
+    if (psi) psi.value = '';
+    renderPolyphones();
+  });
+}
+function jumpToSemyCard(charG) {
+  return jumpToSpecialCard('semyCard-', charG, () => {
+    semyState.status = 'all';
+    semyState.query = '';
+    const ssi = $('#semySearchInput');
+    if (ssi) ssi.value = '';
+    renderPolysemyView();
+  });
+}
+
+function highlightPolyCharInWord(wordZh, targetChar) {
+  return escapeHTML(wordZh).split(escapeHTML(targetChar)).join('<mark>' + escapeHTML(targetChar) + '</mark>');
+}
+
+function matchesSpecialEntry(entry, isSemy, state) {
+  const q = state.query;
+  const qPlain = stripTone(q);
+  const g = entry.char;
+  const lvl = getCharLevel(g);
+  const verified = isPolyMastered(g);
+  const p = currentProfile();
+  const chObj = CHAR_DB_MAP.get(g);
+  const frontierMax = (p.frontierIndex || 0) + 180;
+
+  if (state.status === 'lit' && lvl < 1) return false;
+  if (state.status === 'unlit' && lvl !== 0) return false;
+  if (state.status === 'verified' && !verified) return false;
+  if (state.status === 'frontier' && chObj && chObj.index > frontierMax) return false;
+
+  if (!q) return true;
+  if (g.includes(q)) return true;
+  const matchWords = (ws) => ws.some(w => {
+    const wObj = wordById(w.id) || WORD_BY_ZH.get(w.zh);
+    return w.zh.includes(q) ||
+      (w.en || '').toLowerCase().includes(q) ||
+      (wObj && (wObj.py.toLowerCase().includes(q) || stripTone(wObj.py).includes(qPlain)));
+  });
+  if (isSemy) {
+    if ((entry.py || '').toLowerCase().includes(q) || stripTone(entry.py).includes(qPlain)) return true;
+    return entry.senses.some(s => (s.sense || '').toLowerCase().includes(q) || matchWords(s.words));
+  }
+  return entry.readings.some(r =>
+    (r.py || '').toLowerCase().includes(q) ||
+    stripTone(r.py).includes(qPlain) ||
+    (r.sense || '').toLowerCase().includes(q) ||
+    matchWords(r.words)
+  );
+}
+
+function renderPolyWordRow(w, targetChar, sourceKind = 'poly') {
+  const wObj = wordById(w.id) || WORD_BY_ZH.get(w.zh);
+  const pyText = wObj && wObj.py ? wObj.py : '';
+  const openCharFn = sourceKind === 'semy' ? 'openCharFromSemy' : 'openCharFromPoly';
+  const openWordFn = sourceKind === 'semy' ? 'openWordFromSemy' : 'openWordFromPoly';
+  const partners = Array.from(new Set(w.zh.split('').filter(c => c !== targetChar && CHAR_DB_MAP.has(c))));
+  const partnerHTML = partners.map(c => {
+    const cLvl = getCharLevel(c);
+    const dot = cLvl >= 2 ? '●' : (cLvl === 1 ? '◐' : '○');
+    return `<button class="partner-pill ${cLvl >= 1 ? 'lit' : ''}" title="${t(`Study “${c}” and return here`, `学习「${c}」并返回此处`)}" onclick="${openCharFn}('${c}','${targetChar}')"><span class="zh">${c}</span><span style="font-size:10px">${dot}</span></button>`;
+  }).join('');
+
+  return `
+    <div class="poly-word-row">
+      <div class="poly-word-main">
+        <div class="poly-word-top">
+          <span class="poly-word-zh">${highlightPolyCharInWord(w.zh, targetChar)}</span>
+          ${pyText ? `<span class="poly-word-py">${escapeHTML(pyText)}</span>` : ''}
+        </div>
+        <div class="poly-word-en">${escapeHTML(w.en)}</div>
+      </div>
+      <div class="poly-word-tools">
+        ${partnerHTML}
+        <button class="poly-mini-btn" title="${t('Listen to word', '听词汇读音')}" onclick="speak('${w.zh}')">▶</button>
+        <button class="poly-mini-btn" onclick="${openWordFn}('${w.id}','${targetChar}')">${t('Word →', '词卡 →')}</button>
+      </div>
+    </div>`;
+}
+
+function renderPolyCardHeader(g, primaryBadge, extraActionHTML, sourceKind = 'poly') {
+  const { lvl, meta, tier, verified } = getPolyCharMeta(g);
+  const openCharFn = sourceKind === 'semy' ? 'openCharFromSemy' : 'openCharFromPoly';
+  const statusBadge = lvl > 0
+    ? `<span class="pill ${meta.cls}">${meta.short} ${meta.label}</span>`
+    : `<span class="pill">○ ${t('Unlit · Learn to light', '未点亮 · 去学习')}</span>`;
+  const verifiedBadge = verified
+    ? `<span class="pill green">✓ ${t('Quiz Verified', '测验通过')}</span>`
+    : '';
+  const tierBadge = tier ? `<span class="pill">${tierShort(tier)}</span>` : '';
+  const studyLabel = lvl > 0 ? t('Review Char →', '复习此字 →') : t('Study & Light →', '学习点亮 →');
+
+  return `
+    <div class="poly-card-head">
+      <div class="poly-char-id">
+        <button class="cnode poly-tile ${meta.cls}" title="${t(`Open Studio for “${g}”`, `打开「${g}」单字学习舱`)}" onclick="${openCharFn}('${g}','${g}')">
+          ${lvl > 0 ? `<span class="cbadge">${meta.short}</span>` : ''}
+          <span class="cg">${g}</span>
+        </button>
+        <div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            ${primaryBadge}
+            ${tierBadge}
+          </div>
+          <div class="poly-card-badges">
+            ${statusBadge}
+            ${verifiedBadge}
+          </div>
+        </div>
+      </div>
+      <div class="poly-card-actions">
+        <button class="audio-btn primary" onclick="${openCharFn}('${g}','${g}')">📖 ${studyLabel}</button>
+        ${extraActionHTML || ''}
+      </div>
+    </div>`;
+}
+
+function renderStatusDash(elId, chars, title, currentStatus, setFnName) {
+  const dash = $(elId);
+  if (!dash) return;
+  const total = chars.length;
+  const counts = [0, 0, 0, 0];
+  let verifiedCount = 0;
+  chars.forEach(c => {
+    const l = getCharLevel(c);
+    counts[l]++;
+    if (isPolyMastered(c)) verifiedCount++;
+  });
+  const lit = counts[1] + counts[2] + counts[3];
+  const pct3 = total ? (counts[3] / total * 100).toFixed(1) : 0;
+  const pct2 = total ? (counts[2] / total * 100).toFixed(1) : 0;
+  const pct1 = total ? (counts[1] / total * 100).toFixed(1) : 0;
+
+  dash.innerHTML = `
+    <div class="poly-dash">
+      <div class="label">
+        <span>${title}</span>
+        <span>${lit} / ${total} ${t('chars lit on Map', '字已在星图点亮')} · ${verifiedCount} ${t('quiz-verified', '字测验通过')}</span>
+      </div>
+      <div class="bright-bar" style="margin:10px 0 8px">
+        <div class="seg3" style="width:${pct3}%"></div>
+        <div class="seg2" style="width:${pct2}%"></div>
+        <div class="seg1" style="width:${pct1}%"></div>
+      </div>
+      <div class="poly-dash-stats">
+        <button class="bstat ${currentStatus==='lit'?'active':''}" onclick="${setFnName}('lit')">
+          <b><i class="dot l2"></i>${lit} / ${total}</b>
+          <span>${t('Lit on Your Map (Lv.1–3)', '已在星图点亮 (Lv.1–3)')}</span>
+        </button>
+        <button class="bstat ${currentStatus==='verified'?'active':''}" onclick="${setFnName}('verified')">
+          <b><i class="dot l3"></i>${verifiedCount} / ${total}</b>
+          <span>✓ ${t('Quiz-Verified Here', '本页语境测验通过')}</span>
+        </button>
+        <button class="bstat ${currentStatus==='unlit'?'active':''}" onclick="${setFnName}('unlit')">
+          <b><i class="dot l0"></i>${counts[0]}</b>
+          <span>○ ${t('Unlit (Ready to Learn)', '尚未点亮 · 待学习')}</span>
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderStatusFilterTabs(elId, currentStatus, setFnName) {
+  const stEl = $(elId);
+  if (!stEl) return;
+  const statuses = [
+    { id: 'all', label: t('All Status', '全部状态') },
+    { id: 'lit', label: t('● Lit / Learned', '● 已点亮/已学') },
+    { id: 'unlit', label: t('○ Unlit', '○ 未点亮') },
+    { id: 'frontier', label: t('🎯 Up to My Level', '🎯 符合当前程度') },
+    { id: 'verified', label: t('✓ Quiz Verified', '✓ 测验已通过') }
+  ];
+  stEl.innerHTML = statuses.map(s =>
+    `<button class="${currentStatus === s.id ? 'active' : ''}" onclick="${setFnName}('${s.id}')">${s.label}</button>`
+  ).join('');
+}
+
+function renderQuizModeButtons(elId, totalCount, currentMode, setModeFnName) {
+  const modesEl = $(elId);
+  if (!modesEl) return;
+  const qModes = [
+    { id: 'all', label: t(`Quiz: All ${totalCount}`, `范围：全部 ${totalCount} 字`) },
+    { id: 'lit', label: t('● My Lit Chars Only', '● 仅练我已点亮的字') },
+    { id: 'unverified', label: t('○ Needs Practice', '○ 优先练未通过的字') }
+  ];
+  modesEl.innerHTML = qModes.map(m =>
+    `<button class="${currentMode === m.id ? 'active' : ''}" onclick="${setModeFnName}('${m.id}')">${m.label}</button>`
+  ).join('');
+}
+
+// ---------- 9A. Polyphones View (89 multi-reading chars) ----------
+function renderPolyDash() {
+  renderStatusDash('#polyDash', POLY.map(p => p.char), t('Your Polyphones Progress (89)', '你的多音字掌握进度（89字）'), polyState.status, 'setPolyStatus');
+}
+function renderPolyToolbar() {
+  renderStatusFilterTabs('#polyStatusTabs', polyState.status, 'setPolyStatus');
+  renderQuizModeButtons('#polyQuizModes', POLY.length, polyState.quizMode, 'setPolyQuizMode');
+}
+function renderPolyLists() {
+  const polyFiltered = POLY.map((p, i) => ({ p, i })).filter(({ p }) => matchesSpecialEntry(p, false, polyState));
+  const idxEl = $('#polyIndex');
+  if (idxEl) {
+    const chips = polyFiltered.map(({ p }) => {
+      const lvl = getCharLevel(p.char);
+      const m = levelMeta(lvl);
+      const v = isPolyMastered(p.char);
+      return `<button class="idx-chip ${m.cls}" onclick="jumpToPolyCard('${p.char}')"><span>${p.char}</span><span class="ic-v">${p.readings.length}${v ? '✓' : (lvl > 0 ? m.short : '')}</span></button>`;
+    }).join('');
+    idxEl.innerHTML = `
+      <div class="la-card" style="margin-top:0">
+        <div class="label">
+          <span>${t('Quick Character Index', '快速索引')} (${polyFiltered.length})</span>
+          <span>${t('Color = Map brightness · ✓ = Quiz verified', '底色=星图点亮状态 · ✓=已通过读音测验')}</span>
+        </div>
+        ${chips ? `<div class="idx-row">${chips}</div>` : `<p class="muted" style="margin:8px 0 0">${t('No polyphones match the current filter.', '当前筛选下没有匹配的多音字。')}</p>`}
+      </div>`;
+  }
+
+  $('#polyListHeading').textContent = t(`All Polyphones (${polyFiltered.length})`, `多音字对比学习（${polyFiltered.length}字）`);
+  $('#polyGrid').innerHTML = polyFiltered.length
+    ? polyFiltered.map(({ p, i }) => {
+        const branchesHTML = p.readings.map(r => {
+          const sampleSpeak = (r.words && r.words[0]) ? r.words[0].zh : p.char;
+          return `
+            <div class="poly-branch">
+              <div class="poly-branch-head">
+                <div class="poly-py">
+                  <span>${r.py}</span>
+                  <button class="poly-mini-btn" title="${t('Hear this reading in context', '听这个读音的例词发音')}" onclick="speak('${sampleSpeak}')">▶</button>
+                </div>
+                <span class="poly-sense-tag">${escapeHTML(r.sense)}</span>
+              </div>
+              <div class="poly-words">${r.words.map(w => renderPolyWordRow(w, p.char, 'poly')).join('')}</div>
+            </div>`;
+        }).join('');
+        const quizBtn = `<button class="audio-btn" onclick="polyNewQuestion(${i});jumpToQuizCard('polyQuizCard')">🎧 ${t('Quiz', '练一练')}</button>`;
+        const headerHTML = renderPolyCardHeader(p.char, `<span class="pill">${p.readings.length} ${t('readings', '个读音')}</span>`, quizBtn, 'poly');
+        return `<div class="poly-card" id="polyCard-${p.char}">${headerHTML}${branchesHTML}</div>`;
+      }).join('')
+    : `<div class="empty" style="grid-column:1/-1">${t('No polyphones match your filter — try clearing the search or status filter.', '当前筛选下没有符合条件的多音字，试试切换过滤条件。')}</div>`;
+}
+
+async function jumpToQuizCard(cardId = 'polyQuizCard') {
+  const qc = document.getElementById(cardId);
+  if (qc) await scrollIntoViewAsync(qc, { behavior: 'smooth', block: 'center' });
+}
+
 function renderPolyphones() {
-  $('#polyIndex').innerHTML = `<div class="la-card" style="margin-top:0"><div class="label">${t('Index', '索引')} <span>${t('Tap to jump', '点击跳转')}</span></div><div class="idx-row">${POLY.map((p, i) => `<button class="idx-chip" onclick="document.getElementById('polyCard${i}').scrollIntoView({behavior:'smooth'})">${p.char} · ${p.readings.length} ${t('readings', '音')}</button>`).join('')}</div></div>`;
-  $('#polyGrid').innerHTML = POLY.map((p, i) => `<div class="stat-card" id="polyCard${i}"><div style="display:flex;justify-content:space-between;align-items:center"><button class="text-btn" style="font-size:36px;padding:0" onclick="openCharStudio('${p.char}')"><span class="zh">${p.char}</span></button><span class="pill">${p.readings.length} ${t('readings', '个读音')}</span></div>${p.readings.map(r => `<div class="poly-read"><div class="poly-py">${r.py} <span>· ${escapeHTML(r.sense)}</span></div><div class="poly-words">${r.words.map(w => `<button class="poly-chip" onclick="openWord('${w.id}')"><b class="zh">${w.zh}</b><span>${escapeHTML(w.en)}</span></button>`).join('')}</div></div>`).join('')}<button class="la-again" onclick="polyNewQuestion(${i});document.getElementById('polyQuizCard').scrollIntoView({behavior:'smooth'})">🎧 ${t('Quiz ', '测一测 ')}${p.char}</button></div>`).join('');
-  $('#polySemy').innerHTML = POLYSEMY.map(s => `<div class="stat-card"><button class="text-btn" style="font-size:36px;padding:0" onclick="openCharStudio('${s.char}')"><span class="zh">${s.char}</span></button><div class="poly-py">${s.py}</div>${s.senses.map(x => `<div class="poly-read"><b>${escapeHTML(x.sense)}</b><div class="poly-words">${x.words.map(w => `<button class="poly-chip" onclick="openWord('${w.id}')"><b class="zh">${w.zh}</b><span>${escapeHTML(w.en)}</span></button>`).join('')}</div></div>`).join('')}</div>`).join('');
+  renderPolyDash();
+  renderPolyToolbar();
+  renderPolyLists();
   if (!polyQuiz.word) polyNewQuestion(-1); else renderPolyQuiz();
 }
+
+function pickQuizIndex(list, mode) {
+  let candidates = list.map((_, idx) => idx);
+  if (mode === 'lit') {
+    const litPool = candidates.filter(idx => getCharLevel(list[idx].char) >= 1);
+    if (litPool.length) candidates = litPool;
+  } else if (mode === 'unverified') {
+    const unvPool = candidates.filter(idx => !isPolyMastered(list[idx].char));
+    if (unvPool.length) candidates = unvPool;
+  }
+  return candidates[Math.floor(Math.random() * candidates.length)];
+}
+
 function polyNewQuestion(gi) {
-  const g = (typeof gi === 'number' && gi >= 0) ? gi : Math.floor(Math.random() * POLY.length);
+  const g = (typeof gi === 'number' && gi >= 0) ? gi : pickQuizIndex(POLY, polyState.quizMode);
   const p = POLY[g];
   const ri = Math.floor(Math.random() * p.readings.length);
   const word = p.readings[ri].words[Math.floor(Math.random() * p.readings[ri].words.length)];
@@ -9975,33 +10516,206 @@ function polyNewQuestion(gi) {
   polyQuiz = { gi: g, ri, word, order, answered: false, pick: -1, score: polyQuiz.score, total: polyQuiz.total };
   renderPolyQuiz();
 }
+
 function renderPolyQuiz() {
   const box = $('#polyQuizBox');
   if (!box || !polyQuiz.word) return;
   const p = POLY[polyQuiz.gi];
   const r = p.readings[polyQuiz.ri];
+  const lvl = getCharLevel(p.char);
+  const meta = levelMeta(lvl);
+  const verified = isPolyMastered(p.char);
+  const wObj = wordById(polyQuiz.word.id) || WORD_BY_ZH.get(polyQuiz.word.zh);
+
   $('#polyQuizScore').textContent = polyQuiz.total
     ? t(`Score: ${polyQuiz.score} / ${polyQuiz.total}`, `正确 ${polyQuiz.score} / ${polyQuiz.total}`)
     : t('Pick the reading in context', '选出该字在词中的正确读音');
+
   const opts = polyQuiz.order.map(k => {
     const rr = p.readings[k];
     let cls = '';
     if (polyQuiz.answered) { if (k === polyQuiz.ri) cls = ' correct'; else if (k === polyQuiz.pick) cls = ' wrong'; }
     return `<button class="la-opt${cls}" ${polyQuiz.answered ? 'disabled' : ''} onclick="polyAnswer(${k})"><b style="font-size:18px;color:var(--bamboo);display:block">${rr.py}</b><span style="font-size:12px;color:var(--ink2)">${escapeHTML(rr.sense)}</span></button>`;
   }).join('');
-  box.innerHTML = `<p style="margin:0 0 8px;font-weight:700">${t(`How is “${p.char}” read in this word?`, `「${p.char}」在下面这个词里读作？`)}</p>
-    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span class="zh" style="font-size:36px;font-weight:900">${polyQuiz.word.zh}</span><span class="muted">${escapeHTML(polyQuiz.word.en)}</span><button class="audio-btn" onclick="speak('${polyQuiz.word.zh}')">▶ ${t('Play', '听读音')}</button></div>
+
+  const sentHTML = (wObj && wObj.sent && polyQuiz.answered)
+    ? `<div class="poly-sent-preview"><div class="zh" style="font-weight:700">${escapeHTML(wObj.sent.zh)}</div><div class="muted" style="font-size:12.5px">${escapeHTML(wObj.sent.py)} — ${escapeHTML(wObj.sent.en)}</div></div>`
+    : '';
+
+  box.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+      <p style="margin:0;font-weight:700">${t(`How is “${p.char}” read in this word?`, `「${p.char}」在下面这个词里读作？`)}</p>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <span class="pill ${meta.cls}" style="font-size:11.5px;padding:3px 9px">${meta.short} ${meta.label}</span>
+        ${verified ? `<span class="pill green" style="font-size:11.5px;padding:3px 9px">✓ ${t('Verified', '已通过')}</span>` : ''}
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span class="zh poly-word-zh" style="font-size:34px">${highlightPolyCharInWord(polyQuiz.word.zh, p.char)}</span>
+      <span class="muted">${escapeHTML(polyQuiz.word.en)}</span>
+      <button class="audio-btn" onclick="speak('${polyQuiz.word.zh}')">▶ ${t('Listen', '听读音')}</button>
+      <button class="audio-btn" onclick="openCharFromPoly('${p.char}','${p.char}')">📖 ${t('Study ', '学「')}${p.char}${t('', '」')}</button>
+    </div>
     <div class="la-opts">${opts}</div>
-    <div class="la-fb ${polyQuiz.answered ? 'show ' + (polyQuiz.pick === polyQuiz.ri ? 'good' : 'bad') : ''}">${polyQuiz.answered ? t(`In “${polyQuiz.word.zh}”, it is read <b>${r.py}</b> (${escapeHTML(r.sense)}).`, `在「${polyQuiz.word.zh}」中读 <b>${r.py}</b>（${escapeHTML(r.sense)}）。`) : ''}</div>
-    <button class="la-again" onclick="polyNewQuestion(-1)">↻ ${t('Next Question', '下一题')}</button>`;
+    <div class="la-fb ${polyQuiz.answered ? 'show ' + (polyQuiz.pick === polyQuiz.ri ? 'good' : 'bad') : ''}">
+      ${polyQuiz.answered ? t(`In “${polyQuiz.word.zh}” (${wObj ? wObj.py : r.py}), “${p.char}” is read <b>${r.py}</b> — ${escapeHTML(r.sense)}.`, `在「${polyQuiz.word.zh}」(${wObj ? wObj.py : r.py}) 中「${p.char}」读 <b>${r.py}</b>（${escapeHTML(r.sense)}）。`) : ''}
+    </div>
+    ${sentHTML}
+    <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px">
+      <button class="la-again" style="margin-top:0" onclick="polyNewQuestion(-1)">↻ ${t('Next Question', '下一题')}</button>
+      <button class="la-again" style="margin-top:0;width:auto;padding:0 14px" onclick="jumpToPolyCard('${p.char}')">${t('Find Card ↓', '定位卡片 ↓')}</button>
+    </div>`;
 }
+
 function polyAnswer(k) {
   if (polyQuiz.answered) return;
   polyQuiz.answered = true;
   polyQuiz.pick = k;
   polyQuiz.total++;
-  if (k === polyQuiz.ri) polyQuiz.score++;
+  const p = POLY[polyQuiz.gi];
+  if (k === polyQuiz.ri) {
+    polyQuiz.score++;
+    markPolyMastered(p.char);
+    persistCurrent();
+    renderPolyDash();
+    renderPolyLists();
+  }
   renderPolyQuiz();
+}
+
+// ---------- 9B. Multiple Meanings View (12 same-sound multi-sense chars) ----------
+function renderSemyDash() {
+  renderStatusDash('#semyDash', POLYSEMY.map(s => s.char), t('Your Multiple-Meanings Progress (12)', '你的多义字掌握进度（12字）'), semyState.status, 'setSemyStatus');
+}
+function renderSemyToolbar() {
+  renderStatusFilterTabs('#semyStatusTabs', semyState.status, 'setSemyStatus');
+  renderQuizModeButtons('#semyQuizModes', POLYSEMY.length, semyState.quizMode, 'setSemyQuizMode');
+}
+function renderSemyLists() {
+  const semyFiltered = POLYSEMY.map((s, i) => ({ s, i })).filter(({ s }) => matchesSpecialEntry(s, true, semyState));
+  const idxEl = $('#semyIndex');
+  if (idxEl) {
+    const chips = semyFiltered.map(({ s }) => {
+      const lvl = getCharLevel(s.char);
+      const m = levelMeta(lvl);
+      const v = isPolyMastered(s.char);
+      return `<button class="idx-chip ${m.cls}" onclick="jumpToSemyCard('${s.char}')"><span>${s.char}</span><span class="ic-v">${s.senses.length}${v ? '✓' : (lvl > 0 ? m.short : '')}</span></button>`;
+    }).join('');
+    idxEl.innerHTML = `
+      <div class="la-card" style="margin-top:0">
+        <div class="label">
+          <span>${t('Quick Character Index', '快速索引')} (${semyFiltered.length})</span>
+          <span>${t('Color = Map brightness · ✓ = Quiz verified', '底色=星图点亮状态 · ✓=已通过词义测验')}</span>
+        </div>
+        ${chips ? `<div class="idx-row">${chips}</div>` : `<p class="muted" style="margin:8px 0 0">${t('No multi-sense characters match the current filter.', '当前筛选下没有匹配的多义字。')}</p>`}
+      </div>`;
+  }
+
+  $('#semyListHeading').textContent = t(`All Multi-Sense Characters (${semyFiltered.length})`, `同音多义字总表（${semyFiltered.length}字）`);
+  $('#polySemy').innerHTML = semyFiltered.length
+    ? semyFiltered.map(({ s, i }) => {
+        const branchesHTML = s.senses.map(x => {
+          const sampleSpeak = (x.words && x.words[0]) ? x.words[0].zh : s.char;
+          return `
+            <div class="poly-branch">
+              <div class="poly-branch-head">
+                <span class="poly-sense-tag" style="font-weight:700;color:var(--ink)">${escapeHTML(x.sense)}</span>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span class="muted" style="font-size:12px">${s.py}</span>
+                  <button class="poly-mini-btn" title="${t('Hear example word', '听例词发音')}" onclick="speak('${sampleSpeak}')">▶</button>
+                </div>
+              </div>
+              <div class="poly-words">${x.words.map(w => renderPolyWordRow(w, s.char, 'semy')).join('')}</div>
+            </div>`;
+        }).join('');
+        const quizBtn = `<button class="audio-btn" onclick="semyNewQuestion(${i});jumpToQuizCard('semyQuizCard')">🎧 ${t('Quiz', '练一练')}</button>`;
+        const headerHTML = renderPolyCardHeader(s.char, `<span class="pill">${s.senses.length} ${t('senses', '种义项')} · ${s.py}</span>`, quizBtn, 'semy');
+        return `<div class="poly-card" id="semyCard-${s.char}">${headerHTML}${branchesHTML}</div>`;
+      }).join('')
+    : `<div class="empty" style="grid-column:1/-1">${t('No multi-sense characters match your filter.', '当前筛选下没有匹配的多义字。')}</div>`;
+}
+
+function renderPolysemyView() {
+  renderSemyDash();
+  renderSemyToolbar();
+  renderSemyLists();
+  if (!semyQuiz.word) semyNewQuestion(-1); else renderSemyQuiz();
+}
+
+function semyNewQuestion(gi) {
+  const g = (typeof gi === 'number' && gi >= 0) ? gi : pickQuizIndex(POLYSEMY, semyState.quizMode);
+  const s = POLYSEMY[g];
+  const si = Math.floor(Math.random() * s.senses.length);
+  const word = s.senses[si].words[Math.floor(Math.random() * s.senses[si].words.length)];
+  const order = shuffleArr(s.senses.map((_, k) => k));
+  semyQuiz = { gi: g, si, word, order, answered: false, pick: -1, score: semyQuiz.score, total: semyQuiz.total };
+  renderSemyQuiz();
+}
+
+function renderSemyQuiz() {
+  const box = $('#semyQuizBox');
+  if (!box || !semyQuiz.word) return;
+  const s = POLYSEMY[semyQuiz.gi];
+  const targetSense = s.senses[semyQuiz.si];
+  const lvl = getCharLevel(s.char);
+  const meta = levelMeta(lvl);
+  const verified = isPolyMastered(s.char);
+  const wObj = wordById(semyQuiz.word.id) || WORD_BY_ZH.get(semyQuiz.word.zh);
+
+  $('#semyQuizScore').textContent = semyQuiz.total
+    ? t(`Score: ${semyQuiz.score} / ${semyQuiz.total}`, `正确 ${semyQuiz.score} / ${semyQuiz.total}`)
+    : t('Pick the meaning in context', '选出该字在词中的具体义项');
+
+  const opts = semyQuiz.order.map(k => {
+    const ss = s.senses[k];
+    let cls = '';
+    if (semyQuiz.answered) { if (k === semyQuiz.si) cls = ' correct'; else if (k === semyQuiz.pick) cls = ' wrong'; }
+    return `<button class="la-opt${cls}" style="min-height:64px" ${semyQuiz.answered ? 'disabled' : ''} onclick="semyAnswer(${k})"><b style="font-size:15px;color:var(--bamboo);display:block">${escapeHTML(ss.sense)}</b><span style="font-size:12px;color:var(--ink2)">${semyQuiz.answered ? ss.words.map(w => w.zh).join(' · ') : s.py}</span></button>`;
+  }).join('');
+
+  const sentHTML = (wObj && wObj.sent && semyQuiz.answered)
+    ? `<div class="poly-sent-preview"><div class="zh" style="font-weight:700">${escapeHTML(wObj.sent.zh)}</div><div class="muted" style="font-size:12.5px">${escapeHTML(wObj.sent.py)} — ${escapeHTML(wObj.sent.en)}</div></div>`
+    : '';
+
+  box.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+      <p style="margin:0;font-weight:700">${t(`Which meaning does “${s.char}” (${s.py}) have in this word?`, `「${s.char}」(${s.py}) 在下面这个词里表示哪种意思？`)}</p>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <span class="pill ${meta.cls}" style="font-size:11.5px;padding:3px 9px">${meta.short} ${meta.label}</span>
+        ${verified ? `<span class="pill green" style="font-size:11.5px;padding:3px 9px">✓ ${t('Verified', '已通过')}</span>` : ''}
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span class="zh poly-word-zh" style="font-size:34px">${highlightPolyCharInWord(semyQuiz.word.zh, s.char)}</span>
+      <span class="muted">${semyQuiz.answered ? escapeHTML(semyQuiz.word.en) : t('Choose the matching sense below', '根据字面语境选择对应义项')}</span>
+      <button class="audio-btn" onclick="speak('${semyQuiz.word.zh}')">▶ ${t('Listen', '听读音')}</button>
+      <button class="audio-btn" onclick="openCharFromSemy('${s.char}','${s.char}')">📖 ${t('Study ', '学「')}${s.char}${t('', '」')}</button>
+    </div>
+    <div class="la-opts">${opts}</div>
+    <div class="la-fb ${semyQuiz.answered ? 'show ' + (semyQuiz.pick === semyQuiz.si ? 'good' : 'bad') : ''}">
+      ${semyQuiz.answered ? t(`In “${semyQuiz.word.zh}” (${escapeHTML(semyQuiz.word.en)}), “${s.char}” means <b>${escapeHTML(targetSense.sense)}</b>.`, `在「${semyQuiz.word.zh}」（${escapeHTML(semyQuiz.word.en)}）中「${s.char}」指 <b>${escapeHTML(targetSense.sense)}</b>。`) : ''}
+    </div>
+    ${sentHTML}
+    <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px">
+      <button class="la-again" style="margin-top:0" onclick="semyNewQuestion(-1)">↻ ${t('Next Question', '下一题')}</button>
+      <button class="la-again" style="margin-top:0;width:auto;padding:0 14px" onclick="jumpToSemyCard('${s.char}')">${t('Find Card ↓', '定位卡片 ↓')}</button>
+    </div>`;
+}
+
+function semyAnswer(k) {
+  if (semyQuiz.answered) return;
+  semyQuiz.answered = true;
+  semyQuiz.pick = k;
+  semyQuiz.total++;
+  const s = POLYSEMY[semyQuiz.gi];
+  if (k === semyQuiz.si) {
+    semyQuiz.score++;
+    markPolyMastered(s.char);
+    persistCurrent();
+    renderSemyDash();
+    renderSemyLists();
+  }
+  renderSemyQuiz();
 }
 
 // ---------- 10. Saved View ----------
