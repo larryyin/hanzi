@@ -359,10 +359,10 @@ h3{margin:18px 0 6px;font-size:16px}
 .add-learner input{flex:1;min-width:0;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);font-size:15px;color:var(--ink)}
 .add-learner button{flex-shrink:0;padding:12px 16px;border-radius:12px;border:none;background:var(--ink);color:var(--bg);font-weight:700}
 
-/* Bottom Nav (4 tabs) */
-.bottomnav{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(640px, calc(100% - 24px));background:color-mix(in srgb, var(--card) 92%, transparent);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:20px;display:grid;grid-template-columns:repeat(4,1fr);padding:6px;z-index:50;box-shadow:0 12px 32px rgba(0,0,0,.12)}
-.bottomnav button{border:none;background:transparent;padding:8px 2px 7px;border-radius:14px;font-size:11.5px;font-weight:700;color:var(--ink2);min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
-.bottomnav button .ic{font-size:19px;line-height:1}
+/* Bottom Nav (5 tabs) */
+.bottomnav{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(700px, calc(100% - 20px));background:color-mix(in srgb, var(--card) 92%, transparent);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:20px;display:grid;grid-template-columns:repeat(5,1fr);padding:6px;z-index:50;box-shadow:0 12px 32px rgba(0,0,0,.12)}
+.bottomnav button{border:none;background:transparent;padding:8px 2px 7px;border-radius:14px;font-size:11px;font-weight:700;color:var(--ink2);min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;white-space:nowrap}
+.bottomnav button .ic{font-size:18px;line-height:1}
 .bottomnav button.active{background:var(--bamboo);color:#fff}
 
 /* Toast */
@@ -414,12 +414,12 @@ h3{margin:18px 0 6px;font-size:16px}
     <div id="testBody"></div>
   </div>
 
-  <!-- 3. EXPLORE: WORD BANK & SPECIALS -->
+  <!-- 3. WORD BANK VIEW (PURE TOPIC & SEARCH BANK) -->
   <div class="view" id="view-explore">
     <div class="backbar" data-backwrap style="display:none"><button class="back-btn" onclick="navBack()"><span data-backlabel>← Back</span></button></div>
     <div style="padding:18px 0 6px">
-      <h1 class="serif" id="exploreHeading" style="font-size:32px;margin:0;letter-spacing:-.02em">Word Bank & Specials</h1>
-      <p class="muted" id="exploreIntro" style="margin:6px 0 0">7,618 real words across 16 topics, plus look-alikes and polyphones. Tap any character inside a word to study and light it up.</p>
+      <h1 class="serif" id="exploreHeading" style="font-size:32px;margin:0;letter-spacing:-.02em">Word Bank · 7,618 Words</h1>
+      <p class="muted" id="exploreIntro" style="margin:6px 0 0">Browse 7,618 real words across 16 everyday topics or search by character, pinyin, or English. Tap any character inside a word to study and light it up.</p>
     </div>
     <input class="search" id="searchInput" placeholder="Search words… e.g. “xué”, “school”, or 学" oninput="onExploreSearch(this)">
     <div class="filters" id="topicFilters" style="margin-top:10px"></div>
@@ -431,21 +431,52 @@ h3{margin:18px 0 6px;font-size:16px}
     <p class="muted" id="exploreEmpty" style="display:none;text-align:center;padding:24px">No matching words found.</p>
   </div>
 
-  <!-- LOOK-ALIKES SUBVIEW -->
-  <div class="view" id="view-lookalikes">
-    <div class="backbar"><button class="back-btn" onclick="navBack()"><span data-backlabel data-fallback="explore">← Back</span></button></div>
-    <div style="padding:12px 0 6px">
-      <h1 class="serif" id="laHeading" style="font-size:30px;margin:0">Look-alikes</h1>
-      <p class="muted" id="laIntro" style="margin:6px 0 0">28 confusable pairs with side-by-side diffs and no-pinyin blind quizzes. Tap any character to open its learning studio.</p>
+  <!-- 3B. SPECIAL PRACTICES HUB (SEPARATED TOP-LEVEL VIEW) -->
+  <div class="view" id="view-specials">
+    <div class="backbar" data-backwrap style="display:none"><button class="back-btn" onclick="navBack()"><span data-backlabel>← Back</span></button></div>
+    <div style="padding:18px 0 6px">
+      <h1 class="serif" id="specialsHeading" style="font-size:32px;margin:0;letter-spacing:-.02em">Special Practices</h1>
+      <p class="muted" id="specialsIntro" style="margin:6px 0 0">Master Chinese’s trickiest characters with side-by-side contrast and random light-up quizzes across Look-alikes, Polyphones, and Multiple Meanings.</p>
     </div>
+    <div id="specialsBody"></div>
+  </div>
+
+  <!-- LOOK-ALIKES SUBVIEW (28 confusable pairs + random quiz + light-up) -->
+  <div class="view" id="view-lookalikes">
+    <div class="backbar">
+      <button class="back-btn" onclick="navBack()"><span data-backlabel data-fallback="specials">← Back</span></button>
+      <div class="backbar-left">
+        <button class="back-btn" onclick="showView('polyphones')">🔀 <span class="js-to-poly">Polyphones (89)</span></button>
+        <button class="back-btn" onclick="showView('polysemy')">💡 <span class="js-to-semy">Multiple Meanings (12)</span></button>
+      </div>
+    </div>
+    <div style="padding:10px 0 4px">
+      <h1 class="serif" id="laHeading" style="font-size:30px;margin:0">Look-alikes · 28 Pairs</h1>
+      <p class="muted" id="laIntro" style="margin:6px 0 0">Spot tiny stroke differences and sound twins in no-pinyin blind quizzes. Pass a pair to light it up here and glow on your Character Map.</p>
+    </div>
+    <div id="laDash"></div>
+    <div class="la-card" id="laQuizCard">
+      <div class="label"><span id="laQuizTitle">Blind Look-Alike Trainer</span><span id="laQuizScore">Test without pinyin hints</span></div>
+      <div class="poly-quiz-modes" id="laQuizModes"></div>
+      <div id="laQuizBox" style="margin-top:10px"></div>
+    </div>
+    <div class="poly-toolbar" id="laToolbar">
+      <input class="search" id="laSearchInput" placeholder="Search character, pinyin, or English gloss…" oninput="onLaSearch(this.value)">
+      <div class="filters" id="laCatTabs"></div>
+      <div class="filters" id="laStatusTabs"></div>
+    </div>
+    <div id="laIndex" style="margin-top:12px"></div>
     <div id="lookalikes"></div>
   </div>
 
   <!-- POLYPHONES SUBVIEW (89 multi-reading chars) -->
   <div class="view" id="view-polyphones">
     <div class="backbar">
-      <button class="back-btn" onclick="navBack()"><span data-backlabel data-fallback="explore">← Back</span></button>
-      <button class="back-btn" id="toSemyBtn" onclick="showView('polysemy')">💡 <span id="toSemyLabel">Multiple Meanings (12)</span> →</button>
+      <button class="back-btn" onclick="navBack()"><span data-backlabel data-fallback="specials">← Back</span></button>
+      <div class="backbar-left">
+        <button class="back-btn" onclick="showView('lookalikes')">👀 <span class="js-to-la">Look-alikes (28)</span></button>
+        <button class="back-btn" id="toSemyBtn" onclick="showView('polysemy')">💡 <span id="toSemyLabel">Multiple Meanings (12)</span></button>
+      </div>
     </div>
     <div style="padding:10px 0 4px">
       <h1 class="serif" id="polyHeading" style="font-size:30px;margin:0">Polyphones · One Char, Multiple Sounds</h1>
@@ -471,8 +502,11 @@ h3{margin:18px 0 6px;font-size:16px}
   <!-- MULTIPLE MEANINGS SUBVIEW (12 same-sound multi-sense chars) -->
   <div class="view" id="view-polysemy">
     <div class="backbar">
-      <button class="back-btn" onclick="navBack()"><span data-backlabel data-fallback="explore">← Back</span></button>
-      <button class="back-btn" id="toPolyBtn" onclick="showView('polyphones')">🔀 <span id="toPolyLabel">Polyphones (89)</span> →</button>
+      <button class="back-btn" onclick="navBack()"><span data-backlabel data-fallback="specials">← Back</span></button>
+      <div class="backbar-left">
+        <button class="back-btn" onclick="showView('lookalikes')">👀 <span class="js-to-la">Look-alikes (28)</span></button>
+        <button class="back-btn" id="toPolyBtn" onclick="showView('polyphones')">🔀 <span id="toPolyLabel">Polyphones (89)</span></button>
+      </div>
     </div>
     <div style="padding:10px 0 4px">
       <h1 class="serif" id="polySemyHeading" style="font-size:30px;margin:0">Multiple Meanings · Same Sound, Different Senses</h1>
@@ -551,7 +585,8 @@ h3{margin:18px 0 6px;font-size:16px}
 <nav class="bottomnav" aria-label="Main">
   <button data-nav="map" class="active" onclick="showView('map')"><span class="ic">🗺️</span><span id="navMap">Char Map</span></button>
   <button data-nav="test" onclick="showView('test')"><span class="ic">🎯</span><span id="navTest">Checkup</span></button>
-  <button data-nav="explore" onclick="showView('explore')"><span class="ic">🧭</span><span id="navExplore">Word Bank</span></button>
+  <button data-nav="specials" onclick="showView('specials')"><span class="ic">⚡</span><span id="navSpecials">Specials</span></button>
+  <button data-nav="explore" onclick="showView('explore')"><span class="ic">📖</span><span id="navExplore">Word Bank</span></button>
   <button data-nav="saved" onclick="showView('saved')"><span class="ic">♥</span><span id="navSaved">Saved</span></button>
 </nav>
 <div class="toast" id="toast"></div>
@@ -8384,19 +8419,29 @@ function applyStaticI18n() {
   setTxt('#testHeading', t('Checkup & Calibration', '测评与巩固'));
   setTxt('#testIntro', t('Estimate your vocabulary with a character checklist, then take ongoing checkups to promote lit characters or catch shaky ones.', '初始字表评估确定你的起点与基础微亮字；途中测验抽查已点亮字与前沿难度，答对升级点亮、答错降级或熄灭。'));
 
-  setTxt('#exploreHeading', t('Word Bank & Specials', '词库与专项'));
-  setTxt('#exploreIntro', t('7,618 real words across 16 topics, plus look-alikes and polyphones. Tap any character inside a word to study and light it up.', '7,618 个真实词条（16个主题），以及形近字辨析与多音字专项。点词条中的任意汉字可直接跳入单字学习舱。'));
+  setTxt('#exploreHeading', t('Word Bank · 7,618 Words', '主题词库 · 7,618 词'));
+  setTxt('#exploreIntro', t('Browse 7,618 real words across 16 everyday topics or search by character, pinyin, or English. Tap any character inside a word to study and light it up.', '7,618 个真实词条（16 个生活主题），支持汉字、拼音与英文检索。点击词条中的任意汉字可直接进入单字学习舱点亮。'));
   const si = $('#searchInput');
   if (si) si.placeholder = t('Search words… e.g. “xué”, “school”, or 学', '搜索词汇… 如 “xué”、“school” 或 学');
   setTxt('#topicBackBtn', t('← All topics', '← 全部主题'));
   setTxt('#exploreEmpty', t('No matching words found.', '没有找到匹配的词条。'));
 
-  setTxt('#laHeading', t('Look-alikes · 28 Pairs', '形近字 · 28 对辨析'));
-  setTxt('#laIntro', t('Confusable pairs with side-by-side diffs and no-pinyin blind quizzes. Tap any character to open its learning studio.', '28 对易混字对比辨析与无拼音盲测。点击单字可直接进入该字学习舱。'));
+  setTxt('#specialsHeading', t('Special Practices', '专项辨析训练'));
+  setTxt('#specialsIntro', t('Master Chinese’s trickiest characters with side-by-side contrast and random light-up quizzes across Look-alikes, Polyphones, and Multiple Meanings.', '针对汉字三大高频难点：形近字、多音字、同音多义字，提供对比记忆与随机闯关点亮。'));
+
+  setTxt('#laHeading', t('Look-alikes · 28 Pairs', '形近字 · 28 对易混辨析'));
+  setTxt('#laIntro', t('Spot tiny stroke differences and sound twins in no-pinyin blind quizzes. Pass a pair to light it up here and glow on your Character Map.', '28 对形近与同音易混字无拼音盲测。闯关答对即可在本页点亮，并在星图上同步微亮！'));
+  setTxt('#laQuizTitle', t('Blind Look-Alike Trainer', '形近字随机盲测'));
+  const lsi = $('#laSearchInput');
+  if (lsi) lsi.placeholder = t('Search character, pinyin, or English gloss…', '搜形近字、拼音或英文词义…');
+
+  document.querySelectorAll('.js-to-la').forEach(el => { el.textContent = t('Look-alikes (28)', '形近字 (28)'); });
+  document.querySelectorAll('.js-to-poly').forEach(el => { el.textContent = t('Polyphones (89)', '多音字 (89)'); });
+  document.querySelectorAll('.js-to-semy').forEach(el => { el.textContent = t('Multiple Meanings (12)', '多义字 (12)'); });
 
   setTxt('#polyHeading', t('Polyphones · One Char, Multiple Sounds', '多音字 · 一字多音'));
   setTxt('#polyIntro', t('89 polyphonic characters (182 readings) whose pronunciation changes depending on the word.', '89 个多音字（182 个读音），在真实词组中区分不同发音与词义。'));
-  setTxt('#toSemyLabel', t('Multiple Meanings (12)', '多义字专项 (12)'));
+  setTxt('#toSemyLabel', t('Multiple Meanings (12)', '多义字 (12)'));
   setTxt('#polyQuizTitle', t('Context Reading Trainer', '语境读音训练'));
   const psi = $('#polySearchInput');
   if (psi) psi.placeholder = t('Search character, pinyin (e.g. xing, hang), or English…', '搜多音字、拼音（如 xing, hang）或英文词义…');
@@ -8404,7 +8449,7 @@ function applyStaticI18n() {
 
   setTxt('#polySemyHeading', t('Multiple Meanings · Same Sound, Different Senses', '多义字 · 同音不同义'));
   setTxt('#polySemyIntro', t('12 high-frequency characters (34 senses) that keep the same pronunciation while shifting meaning across words.', '12 个高频多义字（34 种常见义项），读音相同但在不同词组中含义截然不同。'));
-  setTxt('#toPolyLabel', t('Polyphones (89)', '多音字专项 (89)'));
+  setTxt('#toPolyLabel', t('Polyphones (89)', '多音字 (89)'));
   setTxt('#semyQuizTitle', t('Context Meaning Trainer', '语境词义训练'));
   const ssi = $('#semySearchInput');
   if (ssi) ssi.placeholder = t('Search character, pinyin, sense, or word…', '搜多义字、拼音、义项或词汇…');
@@ -8429,7 +8474,8 @@ function applyStaticI18n() {
 
   setTxt('#navMap', t('Char Map', '汉字星图'));
   setTxt('#navTest', t('Checkup', '测评巩固'));
-  setTxt('#navExplore', t('Word Bank', '词库专项'));
+  setTxt('#navSpecials', t('Specials', '专项训练'));
+  setTxt('#navExplore', t('Word Bank', '主题词库'));
   setTxt('#navSaved', t('Saved', '我的收藏'));
 
   updateBackUI();
@@ -8441,6 +8487,7 @@ function renderAllViews() {
   renderMap();
   renderTopics();
   renderExplore();
+  renderSpecialsHub();
   renderLookalikes();
   renderPolyphones();
   renderPolysemyView();
@@ -8594,7 +8641,8 @@ function makeProfile(name, isDefault) {
     studiedSinceTest: 0,
     recentChars: isDefault ? ['是', '我', '好', '你'] : [],
     testHistory: [],
-    polyMastered: {}
+    polyMastered: {},
+    laMastered: {}
   };
 }
 
@@ -8604,7 +8652,7 @@ function loadProfiles() {
     if (raw) {
       const arr = JSON.parse(raw);
       if (Array.isArray(arr) && arr.length) {
-        return arr.filter(p => p && p.id && p.name).map(p => ({ ...p, polyMastered: p.polyMastered || {} }));
+        return arr.filter(p => p && p.id && p.name).map(p => ({ ...p, polyMastered: p.polyMastered || {}, laMastered: p.laMastered || {} }));
       }
     }
   } catch (e) {}
@@ -8638,6 +8686,19 @@ function markPolyMastered(g) {
   const p = currentProfile();
   if (!p.polyMastered) p.polyMastered = {};
   p.polyMastered[g] = true;
+}
+function laPairKey(i) {
+  const pair = LOOKALIKES[i];
+  return pair ? (pair.a.g + '-' + pair.b.g) : String(i);
+}
+function isLaMastered(i) {
+  const p = currentProfile();
+  return Boolean(p.laMastered && p.laMastered[laPairKey(i)]);
+}
+function markLaMastered(i) {
+  const p = currentProfile();
+  if (!p.laMastered) p.laMastered = {};
+  p.laMastered[laPairKey(i)] = true;
 }
 function setCharLevel(g, lvl) {
   const p = currentProfile();
@@ -8718,7 +8779,8 @@ function viewLabel(name) {
   const labels = {
     map: t('Char Map', '汉字星图'),
     test: t('Checkup', '测评巩固'),
-    explore: t('Word Bank', '词库专项'),
+    specials: t('Specials', '专项训练'),
+    explore: t('Word Bank', '主题词库'),
     saved: t('Saved', '我的收藏'),
     lookalikes: t('Look-alikes', '形近字'),
     polyphones: t('Polyphones', '多音字'),
@@ -8788,10 +8850,21 @@ function activateView(name) {
   const el = document.getElementById('view-' + name);
   if (el) el.classList.add('active');
   currentView = name;
-  const tabFor = { map: 'map', test: 'test', explore: 'explore', saved: 'saved' }[name];
+  const tabFor = {
+    map: 'map',
+    test: 'test',
+    specials: 'specials',
+    lookalikes: 'specials',
+    polyphones: 'specials',
+    polysemy: 'specials',
+    explore: 'explore',
+    saved: 'saved'
+  }[name];
   document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('active', b.dataset.nav === tabFor));
   if (name === 'map') renderMap();
   if (name === 'test') renderTestCenter();
+  if (name === 'specials') renderSpecialsHub();
+  if (name === 'lookalikes') renderLookalikes();
   if (name === 'polyphones') renderPolyphones();
   if (name === 'polysemy') renderPolysemyView();
   if (name === 'saved') renderSaved();
@@ -9132,6 +9205,7 @@ function openCharStudio(g, replaceCurrent = false, anchorId = null, contextChar 
     if (!resolvedAnchor) {
       if (currentView === 'polyphones') resolvedAnchor = 'polyCard-' + (contextChar || g);
       else if (currentView === 'polysemy') resolvedAnchor = 'semyCard-' + (contextChar || g);
+      else if (currentView === 'lookalikes') resolvedAnchor = 'laCard-' + (contextChar || 0);
       else if (currentView === 'map') resolvedAnchor = 'mapNode-' + g;
     }
     navGo('char-studio', { anchorId: resolvedAnchor, contextChar: contextChar || g });
@@ -10007,23 +10081,7 @@ function renderExplore() {
     empty.style.display = 'none';
     home.style.display = 'block';
     home.innerHTML = `
-      <h2 class="serif" style="font-size:21px;margin:16px 0 0">${t('Special Practice', '专项辨析')}</h2>
-      <button class="la-entry" style="margin-top:10px" onclick="navGo('lookalikes')">
-        <span class="la-pair-mini">未<i>/</i>末</span>
-        <span style="flex:1;min-width:0"><b>${t('Look-alikes · 28 Confusable Pairs', '形近字 · 28 对易混字对比')}</b><p>${t('One tiny stroke, shared component, or same sound — tested without pinyin.', '一笔之差、同部件或同音字，无拼音盲测。')}</p></span>
-        <span class="la-go">→</span>
-      </button>
-      <button class="la-entry" style="margin-top:10px" onclick="navGo('polyphones')">
-        <span class="la-pair-mini">行<i>/</i>乐</span>
-        <span style="flex:1;min-width:0"><b>${t('Polyphones · 89 Chars, 182 Readings', '多音字 · 89 字 182 个读音')}</b><p>${t('One character, different pronunciations & meanings in real words.', '一字多音，在真实词组中区分不同读音与释义。')}</p></span>
-        <span class="la-go">→</span>
-      </button>
-      <button class="la-entry" style="margin-top:10px" onclick="navGo('polysemy')">
-        <span class="la-pair-mini">面<i>·</i>开</span>
-        <span style="flex:1;min-width:0"><b>${t('Multiple Meanings · 12 Chars, 34 Senses', '多义字 · 12 字 34 种义项')}</b><p>${t('Same pronunciation, shifting meanings across everyday words.', '同音不同义，通过搭配词掌握核心引申义。')}</p></span>
-        <span class="la-go">→</span>
-      </button>
-      <h2 class="serif" style="font-size:21px;margin:22px 0 0">${t('Browse Word Bank by Topic (7,618 Words)', '按主题浏览词库（7,618 词）')}</h2>
+      <h2 class="serif" style="font-size:21px;margin:16px 0 0">${t('Browse by Topic (16 Topics · 7,618 Words)', '按 16 个主题浏览词库（7,618 词）')}</h2>
       <div class="grid" style="margin-top:10px">` + TOPICS.slice(1).map(tName => {
         const ws = WORDS.filter(w => w.topic === tName);
         const done = ws.filter(w => (w.chars || []).every(c => getCharLevel(c.g) >= 1)).length;
@@ -10113,8 +10171,74 @@ function openWord(id, replace = false, anchorId = null, contextChar = null) {
   window.scrollTo({ top: 0 });
 }
 
-// Look-alikes & Polyphones
-const laState = {};
+// ---------- 9S. Special Practices Hub & Look-alikes (Random Quiz + Light-Up) ----------
+function renderSpecialsHub() {
+  const box = $('#specialsBody');
+  if (!box) return;
+  const laPassed = LOOKALIKES.filter((_, i) => isLaMastered(i)).length;
+  const polyPassed = POLY.filter(p => isPolyMastered(p.char)).length;
+  const semyPassed = POLYSEMY.filter(s => isPolyMastered(s.char)).length;
+  const totalItems = LOOKALIKES.length + POLY.length + POLYSEMY.length;
+  const totalPassed = laPassed + polyPassed + semyPassed;
+  const totalPct = totalItems ? (totalPassed / totalItems * 100).toFixed(1) : 0;
+
+  const mods = [
+    {
+      view: 'lookalikes',
+      mini: '未<i>/</i>末',
+      title: t('Look-alikes · 28 Confusable Pairs', '形近字 · 28 对易混辨析'),
+      desc: t('Blind no-pinyin trainer for stroke twins, shared components & same-sound traps.', '无拼音随机盲测：辨析一笔之差、同部件字与同音混淆字，答对即点亮。'),
+      done: laPassed,
+      total: LOOKALIKES.length,
+      unit: t('pairs lit', '对已点亮')
+    },
+    {
+      view: 'polyphones',
+      mini: '行<i>/</i>乐',
+      title: t('Polyphones · 89 Chars, 182 Readings', '多音字 · 89 字 182 个读音'),
+      desc: t('One character, shifting pronunciations & meanings in real word context.', '一字多音语境辨析与随机测验，答对同步点亮星图。'),
+      done: polyPassed,
+      total: POLY.length,
+      unit: t('chars lit', '字已点亮')
+    },
+    {
+      view: 'polysemy',
+      mini: '面<i>·</i>开',
+      title: t('Multiple Meanings · 12 Chars, 34 Senses', '多义字 · 12 字 34 种义项'),
+      desc: t('Same sound, different senses across everyday compound words.', '同音不同义高频字精讲与语境词义快测，答对同步点亮。'),
+      done: semyPassed,
+      total: POLYSEMY.length,
+      unit: t('chars lit', '字已点亮')
+    }
+  ];
+
+  box.innerHTML = `
+    <div class="poly-dash">
+      <div class="label">
+        <span>${t('Overall Special Practices Progress', '专项辨析总点亮进度')}</span>
+        <span>${totalPassed} / ${totalItems} ${t('items lit', '项已闯关点亮')} (${totalPct}%)</span>
+      </div>
+      <div class="bright-bar" style="margin:10px 0 4px">
+        <div class="seg2" style="width:${totalPct}%"></div>
+      </div>
+    </div>
+    ${mods.map(m => `
+      <button class="la-entry" style="margin-top:12px" onclick="navGo('${m.view}')">
+        <span class="la-pair-mini">${m.mini}</span>
+        <span style="flex:1;min-width:0">
+          <b>${m.title}</b>
+          <p style="margin:3px 0 8px">${m.desc}</p>
+          <div class="bright-bar" style="margin:0 0 4px;height:7px"><div class="seg2" style="width:${m.total ? (m.done/m.total*100).toFixed(1) : 0}%"></div></div>
+          <small style="color:var(--bamboo);font-weight:700">✓ ${m.done} / ${m.total} ${m.unit}</small>
+        </span>
+        <span class="la-go">→</span>
+      </button>`).join('')}
+  `;
+}
+
+const laFilter = { cat: 'all', status: 'all', query: '', quizMode: 'all' };
+let laQuiz = { gi: -1, side: 0, answered: false, pick: -1, score: 0, total: 0 };
+
 function laCats() {
   return [
     { key: 'shape', name: t('One Tiny Stroke', '差一笔'), sub: t('Shape twins where one stroke or length changes the character.', '形体极其相似，差一笔或长短不同。') },
@@ -10122,48 +10246,268 @@ function laCats() {
     { key: 'sound', name: t('Same Sound', '同音字'), sub: t('Pronounced identically — only the written shape tells them apart.', '读音相同或相近，只能靠字形区分。') }
   ];
 }
-function laSideHTML(s) {
-  return `<div class="la-side"><button class="text-btn" style="padding:0" onclick="openCharStudio('${s.g}')"><div class="la-glyph zh">${s.g}</div></button><div class="la-py">${s.py}</div><div class="la-en">${escapeHTML(s.en)}</div><div style="font-size:12px;color:var(--ink2);margin-top:6px">${t('in', '例词')} <button class="text-btn" style="padding:0;min-height:auto;font-size:13px" onclick="openWord('${s.wordId}')">${s.word}</button></div></div>`;
+function openCharFromLa(g, pairIdx) {
+  openCharStudio(g, false, 'laCard-' + pairIdx, LOOKALIKES[pairIdx].a.g + '/' + LOOKALIKES[pairIdx].b.g);
 }
-function laCardHTML(i) {
-  const p = LOOKALIKES[i];
-  if (!laState[i]) laState[i] = { target: Math.random() < 0.5 ? 0 : 1, answered: false, ok: false };
-  const st = laState[i];
-  const tChar = st.target ? p.b : p.a;
-  const opts = [p.a, p.b].map((s, k) => {
-    let cls = '';
-    if (st.answered) { if (k === st.target) cls = ' correct'; else if (k === st.pick) cls = ' wrong'; }
-    return `<button class="la-opt${cls}" ${st.answered ? 'disabled' : ''} onclick="laAnswer(${i},${k})"><span class="la-glyph zh">${s.g}</span><span class="la-py">${s.py}</span></button>`;
-  }).join('');
-  return `<div class="la-card" id="laCard${i}">
-    <div class="la-pair">${laSideHTML(p.a)}<div class="la-vs">vs</div>${laSideHTML(p.b)}</div>
-    <div class="la-diff">🔍 ${p.diff}</div>
-    <div class="la-actions"><button class="audio-btn" onclick="speak('${p.a.g}')">▶ ${p.a.g} ${p.a.py}</button><button class="audio-btn" onclick="speak('${p.b.g}')">▶ ${p.b.g} ${p.b.py}</button></div>
-    <div class="la-quiz"><p style="margin:0;font-weight:700">${t(`Quick check: Which one means “${escapeHTML(tChar.en)}”?`, `快速自测：哪一个是 “${escapeHTML(tChar.en)}”？`)}</p>
-      <div class="la-opts">${opts}</div>
-      <div class="la-fb ${st.answered ? 'show ' + (st.ok ? 'good' : 'bad') : ''}">${st.answered ? (st.ok ? t('✓ Correct: ', '✓ 选对了：') + tChar.g : t('✗ Answer is: ', '✗ 正确答案是：') + tChar.g) : ''}</div>
-      ${st.answered ? `<button class="la-again" onclick="laRetry(${i})">↻ ${t('Try Again', '再测一次')}</button>` : ''}
+function openWordFromLa(wordId, pairIdx) {
+  openWord(wordId, false, 'laCard-' + pairIdx, LOOKALIKES[pairIdx].a.g + '/' + LOOKALIKES[pairIdx].b.g);
+}
+function setLaCat(cat) { laFilter.cat = cat; renderLookalikes(); }
+function setLaStatus(st) {
+  laFilter.status = (laFilter.status === st && st !== 'all') ? 'all' : st;
+  renderLookalikes();
+}
+function onLaSearch(val) {
+  laFilter.query = (val || '').trim().toLowerCase();
+  renderLaLists();
+}
+function setLaQuizMode(mode) {
+  laFilter.quizMode = mode;
+  laNewQuestion(-1);
+  renderLaToolbar();
+}
+function jumpToLaCard(i) {
+  return jumpToSpecialCard('laCard-', i, () => {
+    laFilter.cat = 'all';
+    laFilter.status = 'all';
+    laFilter.query = '';
+    const lsi = $('#laSearchInput');
+    if (lsi) lsi.value = '';
+    renderLookalikes();
+  });
+}
+
+function laHasLitChar(pair) {
+  return getCharLevel(pair.a.g) >= 1 || getCharLevel(pair.b.g) >= 1;
+}
+
+function matchesLaPair(pair, i) {
+  if (laFilter.cat !== 'all' && pair.cat !== laFilter.cat) return false;
+  const passed = isLaMastered(i);
+  const lit = laHasLitChar(pair);
+  if (laFilter.status === 'passed' && !passed) return false;
+  if (laFilter.status === 'unlit' && passed) return false;
+  if (laFilter.status === 'maplit' && !lit) return false;
+  const q = laFilter.query;
+  if (!q) return true;
+  const qp = stripTone(q);
+  return [pair.a, pair.b].some(s =>
+    s.g.includes(q) || s.py.toLowerCase().includes(q) || stripTone(s.py).includes(qp) ||
+    (s.en || '').toLowerCase().includes(q) || (s.word || '').includes(q) || (s.wordEn || '').toLowerCase().includes(q)
+  );
+}
+
+function renderLaDash() {
+  const dash = $('#laDash');
+  if (!dash) return;
+  const total = LOOKALIKES.length;
+  let passed = 0, mapLit = 0;
+  LOOKALIKES.forEach((p, i) => {
+    if (isLaMastered(i)) passed++;
+    if (laHasLitChar(p)) mapLit++;
+  });
+  const unlit = total - passed;
+  const pctPassed = (passed / total * 100).toFixed(1);
+  dash.innerHTML = `
+    <div class="poly-dash">
+      <div class="label">
+        <span>${t('Look-Alikes Light-Up Progress (28 Pairs)', '形近字点亮进度（28 对）')}</span>
+        <span>✓ ${passed} / ${total} ${t('pairs quiz-lit', '对已闯关点亮')} · ${mapLit} ${t('have lit chars on Map', '对含星图已亮字')}</span>
+      </div>
+      <div class="bright-bar" style="margin:10px 0 8px"><div class="seg2" style="width:${pctPassed}%"></div></div>
+      <div class="poly-dash-stats">
+        <button class="bstat ${laFilter.status==='passed'?'active':''}" onclick="setLaStatus('passed')">
+          <b><i class="dot l2"></i>${passed} / ${total}</b>
+          <span>✓ ${t('Lit & Passed Here', '本页已闯关点亮')}</span>
+        </button>
+        <button class="bstat ${laFilter.status==='maplit'?'active':''}" onclick="setLaStatus('maplit')">
+          <b><i class="dot l1"></i>${mapLit} / ${total}</b>
+          <span>● ${t('Lit on Char Map', '含星图已学字')}</span>
+        </button>
+        <button class="bstat ${laFilter.status==='unlit'?'active':''}" onclick="setLaStatus('unlit')">
+          <b><i class="dot l0"></i>${unlit}</b>
+          <span>○ ${t('Unlit (To Practice)', '待闯关点亮')}</span>
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderLaToolbar() {
+  const catEl = $('#laCatTabs');
+  const stEl = $('#laStatusTabs');
+  const mEl = $('#laQuizModes');
+  if (catEl) {
+    const cats = [
+      { id: 'all', label: t(`All (${LOOKALIKES.length})`, `全部 (${LOOKALIKES.length})`) },
+      { id: 'shape', label: '✏️ ' + t('One Tiny Stroke', '差一笔') },
+      { id: 'part', label: '🧩 ' + t('Shared Component', '同部件') },
+      { id: 'sound', label: '🔊 ' + t('Same Sound', '同音字') }
+    ];
+    catEl.innerHTML = cats.map(c => `<button class="${laFilter.cat===c.id?'active':''}" onclick="setLaCat('${c.id}')">${c.label}</button>`).join('');
+  }
+  if (stEl) {
+    const sts = [
+      { id: 'all', label: t('All Status', '全部状态') },
+      { id: 'passed', label: t('✓ Quiz-Lit', '✓ 已点亮') },
+      { id: 'unlit', label: t('○ Unlit', '○ 待点亮') },
+      { id: 'maplit', label: t('● Has Map Lit Char', '● 含星图已学字') }
+    ];
+    stEl.innerHTML = sts.map(s => `<button class="${laFilter.status===s.id?'active':''}" onclick="setLaStatus('${s.id}')">${s.label}</button>`).join('');
+  }
+  if (mEl) {
+    const qModes = [
+      { id: 'all', label: t(`Quiz: All ${LOOKALIKES.length}`, `范围：全部 ${LOOKALIKES.length} 对`) },
+      { id: 'lit', label: t('● Pairs I Know on Map', '● 含我已点亮字') },
+      { id: 'unverified', label: t('○ Unlit Pairs Only', '○ 优先练未点亮对') }
+    ];
+    mEl.innerHTML = qModes.map(m => `<button class="${laFilter.quizMode===m.id?'active':''}" onclick="setLaQuizMode('${m.id}')">${m.label}</button>`).join('');
+  }
+}
+
+function laSideHTML(s, pairIdx) {
+  const lvl = getCharLevel(s.g);
+  const m = levelMeta(lvl);
+  return `<div class="la-side">
+    <div style="display:flex;justify-content:center;align-items:center;gap:6px;margin-bottom:4px">
+      <button class="cnode ${m.cls}" style="min-width:64px;min-height:64px;padding:6px 10px" onclick="openCharFromLa('${s.g}',${pairIdx})">
+        ${lvl > 0 ? `<span class="cbadge">${m.short}</span>` : ''}
+        <span class="cg" style="font-size:32px">${s.g}</span>
+      </button>
     </div>
+    <div class="la-py">${s.py} <button class="poly-mini-btn" style="padding:2px 7px;min-height:24px" onclick="speak('${s.g}')">▶</button></div>
+    <div class="la-en">${escapeHTML(s.en)}</div>
+    <div style="font-size:12px;color:var(--ink2);margin-top:6px">${t('in', '例词')} <button class="text-btn" style="padding:0;min-height:auto;font-size:13px" onclick="openWordFromLa('${s.wordId}',${pairIdx})">${s.word}</button></div>
   </div>`;
 }
-function renderLookalikes() {
-  const sections = laCats().map(c => {
-    const items = LOOKALIKES.map((p, i) => ({ p, i })).filter(x => x.p.cat === c.key);
-    return `<h2 class="serif" style="font-size:22px;margin:22px 0 0">${c.name}</h2><p class="muted" style="margin:2px 0 0">${c.sub}</p>` + items.map(({ i }) => laCardHTML(i)).join('');
+
+function laCardHTML(i) {
+  const p = LOOKALIKES[i];
+  const passed = isLaMastered(i);
+  const catObj = laCats().find(c => c.key === p.cat);
+  const statusPill = passed
+    ? `<span class="pill green">✓ ${t('Lit & Passed', '已闯关点亮')}</span>`
+    : `<span class="pill">○ ${t('Unlit', '待点亮')}</span>`;
+  return `<div class="poly-card" id="laCard-${i}" style="margin-top:12px">
+    <div class="poly-card-head">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        ${catObj ? `<span class="pill">${catObj.name}</span>` : ''}
+        ${statusPill}
+      </div>
+      <div class="poly-card-actions">
+        <button class="audio-btn" onclick="laNewQuestion(${i});jumpToQuizCard('laQuizCard')">🎧 ${t('Quiz This Pair', '测这一对')}</button>
+      </div>
+    </div>
+    <div class="la-pair">${laSideHTML(p.a, i)}<div class="la-vs">vs</div>${laSideHTML(p.b, i)}</div>
+    <div class="la-diff">🔍 ${p.diff}</div>
+  </div>`;
+}
+
+function renderLaLists() {
+  const items = LOOKALIKES.map((p, i) => ({ p, i })).filter(({ p, i }) => matchesLaPair(p, i));
+  const idxEl = $('#laIndex');
+  if (idxEl) {
+    const chips = items.map(({ p, i }) => {
+      const passed = isLaMastered(i);
+      const cls = passed ? 'lvl2' : (laHasLitChar(p) ? 'lvl1' : 'lvl0');
+      return `<button class="idx-chip ${cls}" onclick="jumpToLaCard(${i})"><span>${p.a.g}/${p.b.g}</span><span class="ic-v">${passed ? '✓' : (laHasLitChar(p) ? '◐' : '')}</span></button>`;
+    }).join('');
+    idxEl.innerHTML = `
+      <div class="la-card" style="margin-top:0">
+        <div class="label">
+          <span>${t('Quick Pair Index', '快速索引')} (${items.length})</span>
+          <span>${t('Green = Quiz-lit · Mint = Lit on Map', '绿底=已盲测点亮 · 浅绿=含星图已学字')}</span>
+        </div>
+        ${chips ? `<div class="idx-row">${chips}</div>` : `<p class="muted" style="margin:8px 0 0">${t('No pairs match the current filter.', '当前筛选下没有匹配的形近字。')}</p>`}
+      </div>`;
+  }
+
+  $('#lookalikes').innerHTML = items.length
+    ? items.map(({ i }) => laCardHTML(i)).join('')
+    : `<div class="empty">${t('No look-alike pairs match your filter — try clearing the search or status filter.', '当前筛选下没有匹配的形近字，试试切换过滤条件。')}</div>`;
+}
+
+function laNewQuestion(gi) {
+  let g = (typeof gi === 'number' && gi >= 0) ? gi : -1;
+  if (g < 0) {
+    let pool = LOOKALIKES.map((_, idx) => idx);
+    if (laFilter.quizMode === 'lit') {
+      const litPool = pool.filter(idx => laHasLitChar(LOOKALIKES[idx]));
+      if (litPool.length) pool = litPool;
+    } else if (laFilter.quizMode === 'unverified') {
+      const unvPool = pool.filter(idx => !isLaMastered(idx));
+      if (unvPool.length) pool = unvPool;
+    }
+    g = pool[Math.floor(Math.random() * pool.length)];
+  }
+  const side = Math.random() < 0.5 ? 0 : 1;
+  laQuiz = { gi: g, side, answered: false, pick: -1, score: laQuiz.score, total: laQuiz.total };
+  renderLaQuiz();
+}
+
+function renderLaQuiz() {
+  const box = $('#laQuizBox');
+  if (!box || laQuiz.gi < 0) return;
+  const p = LOOKALIKES[laQuiz.gi];
+  const tChar = laQuiz.side ? p.b : p.a;
+  const passed = isLaMastered(laQuiz.gi);
+  $('#laQuizScore').textContent = laQuiz.total
+    ? t(`Score: ${laQuiz.score} / ${laQuiz.total}`, `正确 ${laQuiz.score} / ${laQuiz.total}`)
+    : t('No-pinyin blind quiz', '无拼音随机盲测');
+
+  const opts = [p.a, p.b].map((s, k) => {
+    let cls = '';
+    if (laQuiz.answered) {
+      if (k === laQuiz.side) cls = ' correct';
+      else if (k === laQuiz.pick) cls = ' wrong';
+    }
+    return `<button class="la-opt${cls}" ${laQuiz.answered ? 'disabled' : ''} onclick="laAnswer(${k})"><span class="la-glyph zh">${s.g}</span>${laQuiz.answered ? `<span class="la-py">${s.py} · ${escapeHTML(s.en)}</span>` : ''}</button>`;
   }).join('');
-  $('#lookalikes').innerHTML = sections;
+
+  const maskedWord = tChar.word && tChar.word.length > 1
+    ? escapeHTML(tChar.word).split(escapeHTML(tChar.g)).join(' [ ? ] ')
+    : '';
+  box.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+      <p style="margin:0;font-weight:700">${t(`Which character means “${escapeHTML(tChar.en)}”?`, `哪一个汉字的意思是 “${escapeHTML(tChar.en)}”？`)}</p>
+      ${passed ? `<span class="pill green" style="font-size:11.5px;padding:3px 9px">✓ ${t('Pair Lit', '此对已点亮')}</span>` : ''}
+    </div>
+    ${maskedWord ? `<p class="muted" style="margin:0 0 8px;font-size:13.5px">${t('Context word:', '语境词提示：')} <b class="zh">${maskedWord}</b> (${escapeHTML(tChar.wordEn || tChar.en)})</p>` : ''}
+    <div class="la-opts">${opts}</div>
+    <div class="la-fb ${laQuiz.answered ? 'show ' + (laQuiz.pick === laQuiz.side ? 'good' : 'bad') : ''}">
+      ${laQuiz.answered ? (laQuiz.pick === laQuiz.side
+        ? t(`✓ Correct! <b>${tChar.g}</b> (${tChar.py}) — pair lit up! ${p.diff}`, `✓ 答对了！<b>${tChar.g}</b> (${tChar.py}) — 本组已点亮！${p.diff}`)
+        : t(`✗ Answer is <b>${tChar.g}</b> (${tChar.py}). ${p.diff}`, `✗ 正确答案是 <b>${tChar.g}</b> (${tChar.py})。${p.diff}`)) : ''}
+    </div>
+    ${laQuiz.answered ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="audio-btn" onclick="openCharFromLa('${tChar.g}',${laQuiz.gi})">📖 ${t('Study ', '学「')}${tChar.g}${t('', '」')}</button></div>` : ''}
+    <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px">
+      <button class="la-again" style="margin-top:0" onclick="laNewQuestion(-1)">↻ ${t('Next Pair', '随机下一对')}</button>
+      <button class="la-again" style="margin-top:0;width:auto;padding:0 14px" onclick="jumpToLaCard(${laQuiz.gi})">${t('Find Card ↓', '定位卡片 ↓')}</button>
+    </div>`;
 }
-function laAnswer(i, pick) {
-  const st = laState[i];
-  if (!st || st.answered) return;
-  st.answered = true;
-  st.pick = pick;
-  st.ok = (pick === st.target);
-  document.getElementById('laCard' + i).outerHTML = laCardHTML(i);
+
+function laAnswer(k) {
+  if (laQuiz.answered || laQuiz.gi < 0) return;
+  laQuiz.answered = true;
+  laQuiz.pick = k;
+  laQuiz.total++;
+  const p = LOOKALIKES[laQuiz.gi];
+  const tChar = laQuiz.side ? p.b : p.a;
+  if (k === laQuiz.side) {
+    laQuiz.score++;
+    markLaMastered(laQuiz.gi);
+    if (getCharLevel(tChar.g) === 0) setCharLevel(tChar.g, 1);
+    persistCurrent();
+    renderLaDash();
+    renderLaLists();
+  }
+  renderLaQuiz();
 }
-function laRetry(i) {
-  laState[i] = { target: Math.random() < 0.5 ? 0 : 1, answered: false, ok: false };
-  document.getElementById('laCard' + i).outerHTML = laCardHTML(i);
+
+function renderLookalikes() {
+  renderLaDash();
+  renderLaToolbar();
+  renderLaLists();
+  if (laQuiz.gi < 0) laNewQuestion(-1); else renderLaQuiz();
 }
 
 const polyState = { status: 'all', query: '', quizMode: 'all' };
@@ -10445,8 +10789,9 @@ function renderPolyLists() {
   if (idxEl) {
     const chips = polyFiltered.map(({ p }) => {
       const lvl = getCharLevel(p.char);
-      const m = levelMeta(lvl);
       const v = isPolyMastered(p.char);
+      const chipLvl = v ? Math.max(lvl, 2) : lvl;
+      const m = levelMeta(chipLvl);
       return `<button class="idx-chip ${m.cls}" onclick="jumpToPolyCard('${p.char}')"><span>${p.char}</span><span class="ic-v">${p.readings.length}${v ? '✓' : (lvl > 0 ? m.short : '')}</span></button>`;
     }).join('');
     idxEl.innerHTML = `
@@ -10576,6 +10921,7 @@ function polyAnswer(k) {
   if (k === polyQuiz.ri) {
     polyQuiz.score++;
     markPolyMastered(p.char);
+    if (getCharLevel(p.char) === 0) setCharLevel(p.char, 1);
     persistCurrent();
     renderPolyDash();
     renderPolyLists();
@@ -10597,8 +10943,9 @@ function renderSemyLists() {
   if (idxEl) {
     const chips = semyFiltered.map(({ s }) => {
       const lvl = getCharLevel(s.char);
-      const m = levelMeta(lvl);
       const v = isPolyMastered(s.char);
+      const chipLvl = v ? Math.max(lvl, 2) : lvl;
+      const m = levelMeta(chipLvl);
       return `<button class="idx-chip ${m.cls}" onclick="jumpToSemyCard('${s.char}')"><span>${s.char}</span><span class="ic-v">${s.senses.length}${v ? '✓' : (lvl > 0 ? m.short : '')}</span></button>`;
     }).join('');
     idxEl.innerHTML = `
@@ -10711,6 +11058,7 @@ function semyAnswer(k) {
   if (k === semyQuiz.si) {
     semyQuiz.score++;
     markPolyMastered(s.char);
+    if (getCharLevel(s.char) === 0) setCharLevel(s.char, 1);
     persistCurrent();
     renderSemyDash();
     renderSemyLists();
