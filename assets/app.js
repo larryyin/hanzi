@@ -30,14 +30,16 @@ function applyStaticI18n() {
   const setHtml = (sel, html) => { const el = $(sel); if (el) el.innerHTML = html; };
 
   setTxt('#brandTitle', t('Zoey Learns Hanzi', 'Zoey学汉字'));
-  setTxt('#brandSub', t('Character Map · Light Up Every Hanzi', 'Character Map · 星图点亮版'));
+  setTxt('#brandSub', t('Character Map · Light Up All 3,837 Hanzi', '汉字星图 · 点亮全部 3,837 字'));
   setTxt('#langToggleBtn', t('🌐 中文', '🌐 EN'));
-  setHtml('#bylineText', t('By <b>Larry Yin</b> · Learn Chinese one character at a time', '<b>Larry Yin</b> 出品 · 以单字为单位点亮全图'));
+  setHtml('#bylineText', t(
+    '<span class="slogan-main">✨ One Character at a Time — Light Up All 3,837 Characters on Your Map!</span><span class="byline-credit">By <b>Larry Yin</b></span>',
+    '<span class="slogan-main">✨ 一字一星光 —— 点亮属于你的全部 3,837 个汉字星图！</span><span class="byline-credit"><b>Larry Yin</b> 出品</span>'
+  ));
 
   const msi = $('#mapSearchInput');
   if (msi) msi.placeholder = t('Search character, pinyin (e.g. xue), or English…', '搜汉字、拼音(如 xue)、或英文释义…');
-  const db = $('#densityBtn');
-  if (db) db.textContent = mapState.compact ? t('Standard Grid', '标准字格') : t('Overview Grid', '全景星图');
+  syncDensityButtons();
 
   setTxt('#testHeading', t('Checkup & Calibration', '测评与巩固'));
   setTxt('#testIntro', t('Estimate your vocabulary with a character checklist, then take ongoing checkups to promote lit characters or catch shaky ones.', '初始字表评估确定你的起点与基础微亮字；途中测验抽查已点亮字与前沿难度，答对升级点亮、答错降级或熄灭。'));
@@ -712,14 +714,25 @@ function setLevelFilter(lvl) {
   mapState.levelFilter = (mapState.levelFilter === lvl) ? -1 : lvl;
   renderMap();
 }
-function toggleMapDensity() {
-  mapState.compact = !mapState.compact;
-  const btn = $('#densityBtn');
-  if (btn) {
-    btn.classList.toggle('active', mapState.compact);
-    btn.textContent = mapState.compact ? t('Standard Grid', '标准字格') : t('Overview Grid', '全景星图');
+function syncDensityButtons() {
+  const stdBtn = $('#densityStandardBtn');
+  const ovBtn = $('#densityBtn');
+  if (stdBtn) {
+    stdBtn.classList.toggle('active', !mapState.compact);
+    stdBtn.textContent = t('⊞ Standard Grid', '⊞ 标准字格');
   }
+  if (ovBtn) {
+    ovBtn.classList.toggle('active', mapState.compact);
+    ovBtn.textContent = t('⠿ Overview Grid', '⠿ 全景星图');
+  }
+}
+function setMapDensity(compact) {
+  mapState.compact = Boolean(compact);
+  syncDensityButtons();
   renderMapGrid();
+}
+function toggleMapDensity() {
+  setMapDensity(!mapState.compact);
 }
 
 function jumpToFrontierOnMap() {
@@ -791,6 +804,18 @@ function renderMap() {
       <button class="audio-btn" style="min-height:32px;padding:4px 11px;font-size:12px" onclick="jumpToFrontierOnMap()">🎯 ${t('Jump to Frontier #', '定位前沿 #')}${frontier + 1} ↓</button>
     </div>`;
 
+  const howToHTML = `
+    <div class="how-to-grid">
+      <div class="how-to-item">
+        <span class="how-to-ic">📖</span>
+        <div><b>${t('1. Learn to Light Up (● Lv.2)', '1. 学习单字点亮（● 翠竹 Lv.2）')}</b>${t('Tap any character below or click Random Character, then pass its 2-step quiz to light it up.', '点击下方任意汉字或「随机学一字」，完成 2 步小测即可点亮。')}</div>
+      </div>
+      <div class="how-to-item">
+        <span class="how-to-ic">🎯</span>
+        <div><b>${t('2. Test to Brighten (◐ Lv.1 → ✦ Lv.3)', '2. 测评升级金辉（◐ Lv.1 → ✦ Lv.3）')}</b>${t('Take Checkups or Specials quizzes to spot-light characters and promote lit ones to Radiant Gold!', '通过「测评巩固」或「专项训练」抽查点亮新字，并将已学字升级为金辉精通！')}</div>
+      </div>
+    </div>`;
+
   $('#heroDash').innerHTML = `
     <div class="hero-top">
       <div>
@@ -798,7 +823,7 @@ function renderMap() {
           <span>${t(escapeHTML(p.name) + '’s Character Map', escapeHTML(p.name) + ' 的汉字星图')}</span>
           <span>${t('Light a char · Unlock its words', '点亮一字 · 解锁一组词')}</span>
         </div>
-        <h1>${t(`<em>${stats.lit}</em> Lit`, `已点亮 <em>${stats.lit}</em> 字`)} <small style="font-size:16px;color:var(--ink2);font-weight:600">(${totalPct}%)</small></h1>
+        <h1>${t(`<em>${stats.lit}</em> <span style="font-size:19px;color:var(--ink2);font-weight:600">/ ${stats.total}</span> Lit`, `已点亮 <em>${stats.lit}</em> <span style="font-size:19px;color:var(--ink2);font-weight:600">/ ${stats.total}</span> 字`)} <small style="font-size:15px;color:var(--ink2);font-weight:600">(${totalPct}%)</small></h1>
       </div>
       <div class="level-badge">
         ${tierName(fTier)}
@@ -835,6 +860,7 @@ function renderMap() {
         <span>${testBtnLabel}</span><span>→</span>
       </button>
     </div>
+    ${howToHTML}
     ${upliftBanner}
     ${quickHTML}
     ${remindHTML}
@@ -856,6 +882,7 @@ function renderMap() {
     `<button class="${mapState.levelFilter === x.id ? 'active' : ''}" onclick="setLevelFilter(${x.id})">${x.label}</button>`
   ).join('');
 
+  syncDensityButtons();
   renderMapGrid();
 }
 
@@ -902,7 +929,10 @@ function renderMapGrid() {
       <section class="tier-section${isDeferred ? ' deferred' : ''}">
         <div class="tier-head">
           <h2>${tierName(tObj)} <span class="pill">${tierDesc(tObj)}</span></h2>
-          <span class="tier-meta">${tierLit} / ${totalT} ${t('lit', '点亮')}（✦${tc[3]} · ●${tc[2]} · ◐${tc[1]}）</span>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span class="tier-meta">${tierLit} / ${totalT} ${t('lit', '点亮')}（✦${tc[3]} · ●${tc[2]} · ◐${tc[1]}）</span>
+            <button class="tier-view-btn" onclick="toggleMapDensity()" title="${t('Switch between Standard Grid and Overview Grid', '切换标准字格与全景星图')}">${mapState.compact ? t('⊞ Standard Grid', '⊞ 切回标准字格') : t('⠿ Overview Grid', '⠿ 切换全景星图')}</button>
+          </div>
         </div>
         <div class="tier-mini-bar">
           <i style="width:${(tc[3]/totalT*100).toFixed(2)}%;background:var(--gold)"></i>

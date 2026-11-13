@@ -43,7 +43,9 @@ button{font:inherit;cursor:pointer;color:inherit}
 .streak i{width:8px;height:8px;background:var(--gold);border-radius:50%;display:block;box-shadow:0 0 0 4px rgba(193,154,75,.2)}
 .lang-btn{background:var(--card);border:1px solid var(--line);padding:8px 12px;border-radius:999px;font-size:12.5px;font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;transition:.15s}
 .lang-btn:hover{border-color:var(--bamboo);color:var(--bamboo)}
-.byline{font-size:12.5px;color:var(--ink2);margin:2px 0 0}
+.byline{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13.5px;color:var(--ink2);margin:8px 0 2px;padding:8px 14px;background:linear-gradient(90deg,var(--bamboo-light),transparent);border-left:3.5px solid var(--bamboo);border-radius:10px}
+.byline .slogan-main{color:var(--ink);font-weight:700;letter-spacing:-.01em}
+.byline .byline-credit{font-size:12px;color:var(--ink2)}
 .byline b{color:var(--ink)}
 
 /* Views */
@@ -111,6 +113,11 @@ h3{margin:18px 0 6px;font-size:16px}
 
 .remind-banner{margin-top:12px;background:var(--gold-bg);border:1px solid var(--gold);color:var(--gold-ink);border-radius:14px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13.5px}
 .remind-banner button{background:var(--gold);color:#fff;border:none;border-radius:999px;padding:7px 13px;font-weight:700;font-size:12.5px;white-space:nowrap}
+.how-to-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+@media(max-width:560px){.how-to-grid{grid-template-columns:1fr}}
+.how-to-item{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:12.5px;line-height:1.45;color:var(--ink2);display:flex;align-items:flex-start;gap:8px}
+.how-to-item b{color:var(--ink);display:block;font-size:13px;margin-bottom:1px}
+.how-to-ic{font-size:16px;line-height:1.2;flex-shrink:0}
 .uplift-strip{margin-top:14px;padding:12px 15px;border-radius:16px;background:linear-gradient(135deg,var(--bamboo-light),var(--gold-bg));border:1px solid var(--lvl1-border);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .uplift-main{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;color:var(--ink)}
 .uplift-pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700;color:var(--bamboo2);white-space:nowrap}
@@ -121,11 +128,15 @@ h3{margin:18px 0 6px;font-size:16px}
 
 /* Map Controls */
 .map-toolbar{margin-top:18px;display:flex;flex-direction:column;gap:10px}
-.search-row{display:flex;gap:8px;align-items:center}
-.search{width:100%;padding:12px 15px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);font-size:15.5px;color:var(--ink)}
+.search-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search{flex:1;min-width:210px;padding:12px 15px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);font-size:15.5px;color:var(--ink)}
 .search:focus{outline:2px solid var(--bamboo);outline-offset:1px}
-.density-btn{flex-shrink:0;padding:11px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);font-weight:700;font-size:13px;white-space:nowrap}
-.density-btn.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.density-seg{display:inline-flex;background:var(--bg2);padding:3px;border-radius:14px;border:1.5px solid var(--line);gap:3px;flex-shrink:0}
+.density-btn{padding:8px 12px;border-radius:10px;border:none;background:transparent;font-weight:700;font-size:12.5px;color:var(--ink2);white-space:nowrap;display:inline-flex;align-items:center;gap:5px;transition:.15s}
+.density-btn:hover{color:var(--ink)}
+.density-btn.active{background:var(--bamboo);color:#fff;box-shadow:0 2px 6px rgba(59,110,85,.22)}
+.tier-view-btn{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:4px 10px;font-size:11.5px;font-weight:700;color:var(--ink2);display:inline-flex;align-items:center;gap:4px}
+.tier-view-btn:hover{border-color:var(--bamboo);color:var(--bamboo)}
 
 .filters{display:flex;gap:7px;overflow-x:auto;padding:2px 0;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}

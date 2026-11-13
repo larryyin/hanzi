@@ -58,7 +58,7 @@
 </svg></span>
         <div>
           <b id="brandTitle">Zoey Learns Hanzi</b>
-          <span id="brandSub">Character Map · Light Up Every Character</span>
+          <span id="brandSub">Character Map · Light Up All 3,837 Hanzi</span>
         </div>
       </button>
       <div class="top-right">
@@ -66,14 +66,17 @@
         <button class="lang-btn" id="langToggleBtn" onclick="toggleLang()" aria-label="Switch interface language">🌐 中文</button>
       </div>
     </div>
-    <p class="byline" id="bylineText">By <b>Larry Yin</b> · Learn Chinese one character at a time</p>
+    <p class="byline" id="bylineText"><span class="slogan-main">✨ One Character at a Time — Light Up All 3,837 Characters on Your Map!</span><span class="byline-credit">By <b>Larry Yin</b></span></p>
 
     <div class="hero-dash" id="heroDash"></div>
 
     <div class="map-toolbar">
       <div class="search-row">
         <input class="search" id="mapSearchInput" placeholder="Search character, pinyin (e.g. xue), or English…" oninput="onMapSearch(this.value)">
-        <button class="density-btn" id="densityBtn" onclick="toggleMapDensity()">Overview Grid</button>
+        <div class="density-seg" role="group" aria-label="Map Grid View">
+          <button class="density-btn active" id="densityStandardBtn" onclick="setMapDensity(false)">⊞ Standard Grid</button>
+          <button class="density-btn" id="densityBtn" onclick="setMapDensity(true)">⠿ Overview Grid</button>
+        </div>
       </div>
       <div class="filters" id="tierFilters"></div>
       <div class="filters" id="levelFilters"></div>
